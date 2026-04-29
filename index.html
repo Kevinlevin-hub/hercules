@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HÉRCULES - PERFORMANCE DIGITAL</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+
+        :root {
+            --bg: #050505;
+            --panel: rgba(15, 15, 15, 0.98);
+            --gold: #c5a059;
+            --gold-glow: rgba(197, 160, 89, 0.4);
+            --text-main: #e0e0e0;
+            --text-dim: #777;
+            --border: #1a1a1a;
+            --input-bg: #0a0a0a;
+            --male: #0088ff;
+            --female: #ff0055;
+            --danger: #ff4444;
+        }
+
+        body.light-mode {
+            --bg: #f4f4f4;
+            --panel: #ffffff;
+            --text-main: #121212;
+            --text-dim: #666;
+            --border: #ddd;
+            --input-bg: #f9f9f9;
+            --gold: #a68544;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
+
+        .glass-panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 850px;
+            padding: 50px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+            position: relative;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .glass-panel.active { display: block; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { color: var(--gold); text-transform: uppercase; letter-spacing: 10px; font-size: 32px; margin-bottom: 8px; font-weight: 300; text-align: center; }
+        .subtitle { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 40px; text-align: center; }
+
+        .btn-gold { background: var(--gold); color: #000; border: none; width: 100%; padding: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-bottom: 15px; }
+        .btn-gold:hover { filter: brightness(1.1); box-shadow: 0 0 15px var(--gold-glow); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--gold); width: 100%; padding: 18px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; font-size: 11px; font-weight: 700; }
+        .btn-outline:hover { border-color: var(--gold); background: rgba(197, 160, 89, 0.05); }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; text-align: left; }
+        .label { font-size: 10px; color: var(--gold); font-weight: 700; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .input-box { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 15px; color: var(--text-main); font-size: 14px; outline: none; }
+        
+        .pass-container { display: flex; }
+        .pass-container input { border-right: none; }
+        .eye-btn { background: var(--input-bg); border: 1px solid var(--border); border-left: none; color: var(--gold); padding: 0 20px; cursor: pointer; font-weight: bold; }
+
+        .athletes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin: 30px 0; }
+        .athlete-card { background: var(--input-bg); border: 1px solid var(--border); border-left: 4px solid var(--gold); padding: 20px; cursor: pointer; transition: 0.3s; position: relative; }
+        .athlete-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .gender-badge { position: absolute; top: 15px; right: 15px; font-size: 10px; font-weight: 900; padding: 2px 8px; border: 1px solid; }
+
+        .sheet-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; }
+        .day-tab { color: var(--gold); font-size: 11px; font-weight: 800; border: 1px solid var(--border); padding: 8px; margin-bottom: 10px; display: inline-block; background: rgba(197, 160, 89, 0.05); width: 100%; }
+        
+        .ex-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--border); align-items: center; text-align: left; }
+        .ex-info b { display: block; color: var(--text-main); font-size: 15px; }
+        .ex-info span { font-size: 11px; color: var(--text-dim); }
+        .val-input { width: 80px; background: #000; border: 1px solid var(--border); color: var(--gold); padding: 8px; text-align: center; font-weight: 800; }
+
+        .info-content { text-align: left; line-height: 1.6; font-size: 14px; color: var(--text-main); }
+        .info-content h3 { color: var(--gold); margin: 20px 0 10px 0; text-transform: uppercase; font-size: 16px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        
+        .theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <div class="theme-toggle">
+        <button class="btn-outline" style="padding: 10px; width: auto;" onclick="toggleTheme()">☀️ MODO CLARO</button>
+    </div>
+
+    <div id="screen-gate" class="glass-panel active">
+        <h1>HÉRCULES</h1>
+        <div class="subtitle">O ÁPICE DA PERFORMANCE DIGITAL</div>
+        <button class="btn-gold" onclick="showScreen('screen-setup')">CRIAR CONTA MESTRE</button>
+        <button class="btn-outline" onclick="checkAccess()">ACESSAR O HUB</button>
+        <button class="btn-outline" onclick="showScreen('screen-project')">SOBRE O PROJETO</button>
+    </div>
+
+    <div id="screen-project" class="glass-panel">
+        <h1>O PROJETO</h1>
+        <div class="subtitle">POR QUE HÉRCULES?</div>
+        <div class="info-content">
+            <h3>Gestão de Elite</h3>
+            <p>O Hércules é uma central de comando para performance física. O site permite monitorar biometria e cargas em tempo real.</p>
+            <h3>Privacidade Total</h3>
+            <p>Seus dados nunca saem do seu navegador. Sem nuvens, sem logins externos, apenas você no controle absoluto.</p>
+        </div>
+        <br>
+        <button class="btn-outline" onclick="showScreen('screen-gate')">VOLTAR AO INÍCIO</button>
+    </div>
+
+    <div id="screen-setup" class="glass-panel">
+        <h1>MESTRE</h1>
+        <div class="subtitle">CRIE SUA CHAVE DE ACESSO</div>
+        <div style="text-align: left;">
+            <span class="label">NOME DO GESTOR</span>
+            <input type="text" id="reg-u" class="input-box" placeholder="Ex: Kevin">
+            <br><br>
+            <span class="label">SENHA MESTRE</span>
+            <div class="pass-container">
+                <input type="password" id="reg-p" class="input-box" placeholder="Sua senha secreta">
+                <button class="eye-btn" onclick="togglePass('reg-p')">&lt;o&gt;</button>
+            </div>
+            <br>
+            <button class="btn-gold" onclick="registerMaster()">CADASTRAR E ENTRAR DIRETO</button>
+            <button class="btn-outline" onclick="showScreen('screen-gate')">VOLTAR</button>
+        </div>
+    </div>
+
+    <div id="screen-login" class="glass-panel">
+        <h1>ACESSO</h1>
+        <div class="subtitle">IDENTIFIQUE-SE</div>
+        <div style="text-align: left;">
+            <span class="label">USUÁRIO</span>
+            <input type="text" id="log-u" class="input-box">
+            <br><br>
+            <span class="label">SENHA</span>
+            <div class="pass-container">
+                <input type="password" id="log-p" class="input-box">
+                <button class="eye-btn" onclick="togglePass('log-p')">&lt;o&gt;</button>
+            </div>
+            <br>
+            <button class="btn-gold" onclick="login()">ENTRAR NO HUB</button>
+            <button class="btn-outline" onclick="showScreen('screen-gate')">CANCELAR</button>
+        </div>
+    </div>
+
+    <div id="screen-lobby" class="glass-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+            <div style="text-align: left;">
+                <span class="label" style="margin:0">GESTÃO MESTRE</span>
+                <b id="mestre-atual" style="color:var(--gold); font-size: 20px;">---</b>
+            </div>
+            <button class="btn-outline" style="width: auto; padding: 10px; margin:0;" onclick="preparaEdicaoMestre()">EDITAR GESTOR</button>
+        </div>
+        <h1 style="font-size: 24px;">MEUS ATLETAS</h1>
+        <div class="subtitle">BIOMETRIA E PERFORMANCE</div>
+        <div class="athletes-grid" id="athletes-container"></div>
+        <button class="btn-gold" onclick="openAddAthlete()">+ ADICIONAR NOVO PERFIL</button>
+        <button class="btn-outline" onclick="logout()">SAIR DO SISTEMA</button>
+    </div>
+
+    <div id="screen-edit-master" class="glass-panel">
+        <h1>GESTÃO MESTRE</h1>
+        <div class="subtitle">ALTERAR CREDENCIAIS</div>
+        <div style="text-align: left;">
+            <span class="label">NOME ATUALIZADO</span>
+            <input type="text" id="edit-m-u" class="input-box">
+            <br><br>
+            <span class="label">NOVA SENHA</span>
+            <input type="password" id="edit-m-p" class="input-box" placeholder="Mantenha vazio para não mudar">
+            <br><br>
+            <button class="btn-gold" onclick="updateMaster()">SALVAR E ATUALIZAR</button>
+            <button class="btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="deleteMaster()">EXCLUIR CONTA MESTRE</button>
+            <button class="btn-outline" onclick="showScreen('screen-lobby')">VOLTAR</button>
+        </div>
+    </div>
+
+    <div id="screen-athlete-form" class="glass-panel">
+        <h1 id="form-title">PERFIL</h1>
+        <div class="subtitle">DADOS BIOMÉTRICOS</div>
+        <div class="form-row">
+            <div style="grid-column: span 2;"><span class="label">NOME</span><input type="text" id="a-nome" class="input-box"></div>
+            <div><span class="label">DATA NASC.</span><input type="date" id="a-nasc" class="input-box"></div>
+            <div><span class="label">GÊNERO</span><select id="a-sexo" class="input-box"><option value="M">MASCULINO</option><option value="F">FEMININO</option></select></div>
+            <div><span class="label">ALTURA (CM)</span><input type="number" id="a-alt" class="input-box" min="1"></div>
+            <div><span class="label">PESO (KG)</span><input type="number" id="a-peso" class="input-box" min="1"></div>
+            <div style="grid-column: span 2;"><span class="label">META</span><select id="a-meta" class="input-box">
+                <option value="HIPERTROFIA">HIPERTROFIA</option>
+                <option value="EMAGRECIMENTO">EMAGRECIMENTO</option>
+                <option value="DEFINICAO">DEFINIÇÃO</option>
+            </select></div>
+        </div>
+        <button class="btn-gold" onclick="saveAthlete()">SALVAR</button>
+        <button class="btn-outline" onclick="showScreen('screen-lobby')">CANCELAR</button>
+    </div>
+
+    <div id="screen-sheet" class="glass-panel">
+        <div class="sheet-header">
+            <div><h2 id="sh-name" style="color:var(--gold)">ATLETA</h2><p id="sh-bio" style="font-size: 11px; color: var(--text-dim)"></p></div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-outline" style="width: auto; padding: 10px;" onclick="editCurrentAthlete()">EDITAR</button>
+                <button class="btn-outline" style="width: auto; padding: 10px;" onclick="showScreen('screen-lobby')">VOLTAR</button>
+            </div>
+        </div>
+        <div id="workout-content" style="max-height: 500px; overflow-y: auto; padding-right: 10px;"></div>
+    </div>
+
+    <div id="screen-ex-detail" class="glass-panel">
+        <h1 id="det-name">DETALHES</h1>
+        <div class="subtitle">TÉCNICA E SEGURANÇA</div>
+        <div class="info-content" id="det-content"></div>
+        <br>
+        <button class="btn-outline" onclick="showScreen('screen-sheet')">VOLTAR</button>
+    </div>
+
+    <script>
+        let athletes = JSON.parse(localStorage.getItem('hercules_athletes')) || [];
+        let currentAthleteId = null;
+
+        const dbTreinos = {
+            "Supino Reto": { foco: "Peitorais e Tríceps", exec: "Desça a barra até o peito.", seg: "Mantenha os pés no chão." },
+            "Agachamento": { foco: "Quadríceps e Glúteos", exec: "Quadril para trás e desça.", seg: "Coluna reta sempre." },
+            "Levantamento Terra": { foco: "Cadeia Posterior e Core", exec: "Puxe do chão com a força das pernas.", seg: "Não curve a lombar." },
+            "Puxada Alta": { foco: "Dorsais e Bíceps", exec: "Puxe a barra em direção ao peito.", seg: "Não use o balanço do corpo." },
+            "Burpees": { foco: "Cardio e Explosão", exec: "Chão, flexão, salto.", seg: "Amorteça a queda." },
+            "Caminhada": { foco: "Resistência", exec: "Passo firme acelerado.", seg: "Calçados adequados." }
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.glass-panel').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(id === 'screen-lobby') renderLobby();
+        }
+
+        function togglePass(id) { const x = document.getElementById(id); x.type = x.type === "password" ? "text" : "password"; }
+        function toggleTheme() { document.body.classList.toggle('light-mode'); }
+        function calculateAge(dob) { return Math.abs(new Date(Date.now() - new Date(dob).getTime()).getUTCFullYear() - 1970); }
+
+        function registerMaster() {
+            const u = document.getElementById('reg-u').value;
+            const p = document.getElementById('reg-p').value;
+            if(!u || !p) return alert("Preencha!");
+            localStorage.setItem('hercules_master', JSON.stringify({user: u, pass: p}));
+            showScreen('screen-lobby');
+        }
+
+        function checkAccess() {
+            if(localStorage.getItem('hercules_master')) showScreen('screen-login');
+            else alert("Crie uma conta primeiro!");
+        }
+
+        function login() {
+            const m = JSON.parse(localStorage.getItem('hercules_master'));
+            if(document.getElementById('log-u').value === m.user && document.getElementById('log-p').value === m.pass) showScreen('screen-lobby');
+            else alert("Incorreto.");
+        }
+
+        function preparaEdicaoMestre() {
+            const m = JSON.parse(localStorage.getItem('hercules_master'));
+            document.getElementById('edit-m-u').value = m.user;
+            showScreen('screen-edit-master');
+        }
+
+        function updateMaster() {
+            const m = JSON.parse(localStorage.getItem('hercules_master'));
+            const nu = document.getElementById('edit-m-u').value;
+            const np = document.getElementById('edit-m-p').value;
+            if(nu) m.user = nu;
+            if(np) m.pass = np;
+            localStorage.setItem('hercules_master', JSON.stringify(m));
+            alert("Mestre Atualizado!");
+            showScreen('screen-lobby');
+        }
+
+        function deleteMaster() {
+            if(confirm("⚠️ APAGAR TUDO?")) { localStorage.clear(); window.location.reload(); }
+        }
+
+        function renderLobby() {
+            const m = JSON.parse(localStorage.getItem('hercules_master'));
+            if(m) document.getElementById('mestre-atual').innerText = m.user.toUpperCase();
+            
+            const container = document.getElementById('athletes-container');
+            container.innerHTML = "";
+            athletes.forEach(a => {
+                const age = calculateAge(a.nasc);
+                const div = document.createElement('div');
+                div.className = 'athlete-card';
+                div.onclick = () => openSheet(a.id);
+                div.innerHTML = `<span class="gender-badge" style="color:${a.sexo === 'M' ? 'var(--male)' : 'var(--female)'}; border-color:${a.sexo === 'M' ? 'var(--male)' : 'var(--female)'}">${a.sexo}</span>
+                <b style="color:var(--gold); font-size:18px;">${a.nome}</b><br>
+                <div style="font-size:11px; color:var(--text-dim); margin-top:5px;">
+                    ${age} ANOS | ${a.peso}KG | ${a.altura}CM<br>
+                    <span style="color:var(--gold); font-weight:700;">${a.meta}</span>
+                </div>`;
+                container.appendChild(div);
+            });
+        }
+
+        function openAddAthlete() { currentAthleteId = null; showScreen('screen-athlete-form'); }
+
+        function saveAthlete() {
+            const data = { id: currentAthleteId || Date.now(), nome: document.getElementById('a-nome').value, nasc: document.getElementById('a-nasc').value, sexo: document.getElementById('a-sexo').value, altura: document.getElementById('a-alt').value, peso: document.getElementById('a-peso').value, meta: document.getElementById('a-meta').value };
+            if(!data.nome || !data.nasc) return alert("Erro nos dados!");
+            if(currentAthleteId) { const idx = athletes.findIndex(x => x.id === currentAthleteId); athletes[idx] = data; }
+            else athletes.push(data);
+            localStorage.setItem('hercules_athletes', JSON.stringify(athletes));
+            showScreen('screen-lobby');
+        }
+
+        function editCurrentAthlete() {
+            const a = athletes.find(x => x.id === currentAthleteId);
+            document.getElementById('a-nome').value = a.nome;
+            document.getElementById('a-nasc').value = a.nasc;
+            document.getElementById('a-alt').value = a.altura;
+            document.getElementById('a-peso').value = a.peso;
+            document.getElementById('a-meta').value = a.meta;
+            showScreen('screen-athlete-form');
+        }
+
+        function openSheet(id) {
+            currentAthleteId = id;
+            const a = athletes.find(x => x.id === id);
+            document.getElementById('sh-name').innerText = a.nome.toUpperCase();
+            document.getElementById('sh-bio').innerText = `${calculateAge(a.nasc)} ANOS | ${a.peso}KG | ${a.altura}CM | ${a.meta}`;
+            
+            const content = document.getElementById('workout-content');
+            content.innerHTML = "";
+
+            const agenda = [
+                { dia: "SEGUNDA - FORÇA SUPERIOR", exs: [{n: "Supino Reto", v: 40}, {n: "Puxada Alta", v: 35}] },
+                { dia: "TERÇA - INFERIORES BASE", exs: [{n: "Agachamento", v: 50}, {n: "Levantamento Terra", v: 60}] },
+                { dia: "QUARTA - DESCANSO ATIVO", exs: [{n: "Caminhada", v: 30, u: "MIN"}] },
+                { dia: "QUINTA - METABÓLICO", exs: [{n: "Burpees", v: 20, u: "REPS"}, {n: "Supino Reto", v: 35}] },
+                { dia: "SEXTA - TÉCNICA", exs: [{n: "Puxada Alta", v: 40}, {n: "Agachamento", v: 45}] }
+            ];
+
+            agenda.forEach(item => {
+                content.innerHTML += `<div class="day-tab">${item.dia}</div>`;
+                item.exs.forEach(e => {
+                    content.innerHTML += `<div class="ex-row">
+                        <div class="ex-info"><b>${e.n}</b><span>Foco em progressão</span></div>
+                        <div><input type="number" class="val-input" value="${e.v}" min="0"> <span class="label" style="display:inline">${e.u || 'KG'}</span></div>
+                        <button class="btn-outline" style="padding:5px; font-size:9px" onclick="showExerciseDetail('${e.n}')">TÉCNICA</button>
+                    </div>`;
+                });
+            });
+            showScreen('screen-sheet');
+        }
+
+        function showExerciseDetail(name) {
+            const d = dbTreinos[name];
+            document.getElementById('det-name').innerText = name.toUpperCase();
+            document.getElementById('det-content').innerHTML = `<h3>Foco</h3><p>${d.foco}</p><h3>Execução</h3><p>${d.exec}</p><h3>Segurança</h3><p>${d.seg}</p>`;
+            showScreen('screen-ex-detail');
+        }
+
+        function logout() { if(confirm("Sair?")) showScreen('screen-gate'); }
+
+        window.onload = () => { if(localStorage.getItem('hercules_master')) renderLobby(); };
+    </script>
+</body>
+</html>
