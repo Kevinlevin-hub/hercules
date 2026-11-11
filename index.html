@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HÉRCULES - PERFORMANCE DIGITAL</title>
+    <title id="page-title">HÉRCULES - PERFORMANCE DIGITAL</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
 
         :root {
             --bg: #050505;
             --panel: rgba(15, 15, 15, 0.98);
-            --gold: #c5a059;
-            --gold-glow: rgba(197, 160, 89, 0.4);
+            --primary: #c5a059;
+            --primary-glow: rgba(197, 160, 89, 0.4);
             --text-main: #e0e0e0;
             --text-dim: #777;
             --border: #1a1a1a;
@@ -19,349 +19,1268 @@
             --male: #0088ff;
             --female: #ff0055;
             --danger: #ff4444;
+            --water: #00bfff;
+            --water-bg: #003350;
         }
+
+        body.theme-hercules { --primary: #c5a059; --primary-glow: rgba(197, 160, 89, 0.4); --border: #1a1a1a; }
+        body.theme-athena   { --primary: #a855f7; --primary-glow: rgba(168, 85, 247, 0.4); --border: #2e1065; }
+        body.theme-ares     { --primary: #ef4444; --primary-glow: rgba(239, 68, 68, 0.4); --border: #450a0a; }
+        body.theme-zeus     { --primary: #3b82f6; --primary-glow: rgba(59, 130, 246, 0.4); --border: #1e3a8a; }
+        body.theme-hermes   { --primary: #22c55e; --primary-glow: rgba(34, 197, 94, 0.4); --border: #064e3b; }
+        body.theme-apolo    { --primary: #c5a059; --primary-glow: rgba(197, 160, 89, 0.4); --border: #1a1a1a; }
+        body.theme-jesus    { --primary: #f59e0b; --primary-glow: rgba(245, 158, 11, 0.4); --border: #d97706; }
 
         body.light-mode {
-            --bg: #f4f4f4;
-            --panel: #ffffff;
+            --bg: #ffffff;
+            --panel: #f5f5f5;
             --text-main: #121212;
             --text-dim: #666;
-            --border: #ddd;
-            --input-bg: #f9f9f9;
-            --gold: #a68544;
+            --border: #cccccc;
+            --input-bg: #ffffff;
+            --water-bg: #e0f7ff;
+        }
+        body.light-mode.theme-hercules { --primary: #a68544; --primary-glow: rgba(166, 133, 68, 0.2); }
+        body.light-mode.theme-athena   { --primary: #7e22ce; --primary-glow: rgba(126, 34, 206, 0.2); --border: #d8b4fe; }
+        body.light-mode.theme-ares     { --primary: #b91c1c; --primary-glow: rgba(185, 28, 28, 0.2); --border: #fca5a5; }
+        body.light-mode.theme-zeus     { --primary: #1d4ed8; --primary-glow: rgba(29, 78, 216, 0.2); --border: #bfdbfe; }
+        body.light-mode.theme-hermes   { --primary: #15803d; --primary-glow: rgba(21, 128, 61, 0.2); --border: #86efac; }
+        
+        body.light-mode.theme-apolo {
+            --bg: #fffbeb;
+            --panel: #fef3c7;
+            --text-main: #78350f;
+            --text-dim: #92400e;
+            --border: #f59e0b;
+            --input-bg: #ffffff;
+            --primary: #d97706;
+            --primary-glow: rgba(217, 119, 6, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        body.light-mode.theme-jesus {
+            --bg: #fef08a;
+            --panel: #fef9c3;
+            --text-main: #000000;
+            --text-dim: #333333;
+            --border: #ca8a04;
+            --input-bg: #ffffff;
+            --primary: #854d0e;
+            --primary-glow: rgba(133, 77, 14, 0.3);
+        }
+
+        body.dalton-protanopia { filter: url(#protanopia-matrix); }
+        body.dalton-deuteranopia { filter: url(#deuteranopia-matrix); }
+        body.dalton-tritanopia { filter: url(#tritanopia-matrix); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+        body { background-color: var(--bg); color: var(--text-main); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; padding: 20px; }
 
         .glass-panel {
             background: var(--panel);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             padding: 50px;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
             position: relative;
             display: none;
-            animation: slideUp 0.4s ease-out;
+            animation: slideUp 0.3s ease-out;
+            text-align: center;
         }
 
         .glass-panel.active { display: block; }
 
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { color: var(--gold); text-transform: uppercase; letter-spacing: 10px; font-size: 32px; margin-bottom: 8px; font-weight: 300; text-align: center; }
-        .subtitle { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 40px; text-align: center; }
+        h1 { color: var(--primary); text-transform: uppercase; letter-spacing: 10px; font-size: 32px; margin-bottom: 8px; font-weight: 900; }
+        .subtitle { font-size: 10px; letter-spacing: 4px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 35px; }
 
-        .btn-gold { background: var(--gold); color: #000; border: none; width: 100%; padding: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-bottom: 15px; }
-        .btn-gold:hover { filter: brightness(1.1); box-shadow: 0 0 15px var(--gold-glow); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--gold); width: 100%; padding: 18px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; font-size: 11px; font-weight: 700; }
-        .btn-outline:hover { border-color: var(--gold); background: rgba(197, 160, 89, 0.05); }
+        .btn-primary { background: var(--primary); color: var(--bg); border: none; width: 100%; padding: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-bottom: 15px; display: block; }
+        .btn-primary:hover { filter: brightness(1.2); box-shadow: 0 0 15px var(--primary-glow); }
+        
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--primary); width: 100%; padding: 18px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; margin-bottom: 12px; font-size: 11px; font-weight: 700; display: block; }
+        .btn-outline:hover { border-color: var(--primary); background: rgba(197, 160, 89, 0.05); }
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; text-align: left; }
-        .label { font-size: 10px; color: var(--gold); font-weight: 700; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .label { font-size: 10px; color: var(--primary); font-weight: 700; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 1px; }
         .input-box { width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 15px; color: var(--text-main); font-size: 14px; outline: none; }
+        .input-box:focus { border-color: var(--primary); }
         
         .pass-container { display: flex; }
         .pass-container input { border-right: none; }
-        .eye-btn { background: var(--input-bg); border: 1px solid var(--border); border-left: none; color: var(--gold); padding: 0 20px; cursor: pointer; font-weight: bold; }
+        .eye-btn { background: var(--input-bg); border: 1px solid var(--border); border-left: none; color: var(--primary); padding: 0 20px; cursor: pointer; font-weight: bold; }
 
         .athletes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin: 30px 0; }
-        .athlete-card { background: var(--input-bg); border: 1px solid var(--border); border-left: 4px solid var(--gold); padding: 20px; cursor: pointer; transition: 0.3s; position: relative; }
-        .athlete-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .athlete-card { background: var(--input-bg); border: 1px solid var(--border); border-left: 4px solid var(--primary); padding: 20px; cursor: pointer; transition: 0.3s; position: relative; text-align: left; }
+        .athlete-card:hover { transform: translateY(-3px); border-color: var(--primary); }
         .gender-badge { position: absolute; top: 15px; right: 15px; font-size: 10px; font-weight: 900; padding: 2px 8px; border: 1px solid; }
 
-        .sheet-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; }
-        .day-tab { color: var(--gold); font-size: 11px; font-weight: 800; border: 1px solid var(--border); padding: 8px; margin-bottom: 10px; display: inline-block; background: rgba(197, 160, 89, 0.05); width: 100%; }
+        .sheet-header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 20px; text-align: left; display: flex; justify-content: space-between; align-items: flex-start; }
+        .day-tab { color: var(--primary); font-size: 11px; font-weight: 800; border: 1px solid var(--border); padding: 8px; margin-bottom: 10px; display: inline-block; background: rgba(197, 160, 89, 0.03); width: 100%; text-align: left; text-transform: uppercase; letter-spacing: 1px; }
         
         .ex-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--border); align-items: center; text-align: left; }
-        .ex-info b { display: block; color: var(--text-main); font-size: 15px; }
+        .ex-info b { display: block; color: var(--text-main); font-size: 15px; cursor: pointer; }
+        .ex-info b:hover { color: var(--primary); text-decoration: underline; }
         .ex-info span { font-size: 11px; color: var(--text-dim); }
-        .val-input { width: 80px; background: #000; border: 1px solid var(--border); color: var(--gold); padding: 8px; text-align: center; font-weight: 800; }
+        .val-input { width: 70px; background: var(--input-bg); border: 1px solid var(--border); color: var(--primary); padding: 8px; text-align: center; font-weight: 800; }
 
-        .info-content { text-align: left; line-height: 1.6; font-size: 14px; color: var(--text-main); }
-        .info-content h3 { color: var(--gold); margin: 20px 0 10px 0; text-transform: uppercase; font-size: 16px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        
-        .theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; }
+        .info-content { text-align: left; line-height: 1.6; font-size: 13px; color: var(--text-main); max-height: 480px; overflow-y: auto; padding-right: 15px; }
+        .info-content h3 { color: var(--primary); margin: 20px 0 8px 0; text-transform: uppercase; font-size: 13px; border-bottom: 1px solid var(--border); padding-bottom: 5px; letter-spacing: 1px; }
+
+        .theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 100; display: flex; gap: 10px; }
+
+        .timer-banner { background: rgba(197, 160, 89, 0.1); border: 1px dashed var(--primary); padding: 15px; margin: 20px 0; font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: 2px; }
+
+        .water-section {
+            background: var(--input-bg);
+            border: 1px solid var(--water);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .water-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .water-title { color: var(--water); font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
+        .water-bar-wrapper { display: flex; align-items: center; gap: 12px; }
+        .water-bar-outer { flex-grow: 1; height: 28px; background: var(--water-bg); border: 1px solid var(--water); border-radius: 14px; overflow: hidden; position: relative; }
+        .water-bar-inner { height: 100%; width: 0%; background: linear-gradient(90deg, #0088ff, #00e5ff); transition: width 0.4s ease-in-out; }
+        .water-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; font-weight: 900; color: #ffffff; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+        .btn-water { background: var(--water); color: #000; border: none; padding: 10px 15px; font-size: 11px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .btn-water-reset { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 12px; font-size: 11px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
-<body class="dark-mode">
+<body class="dark-mode theme-hercules">
+
+    <svg style="display:none">
+        <filter id="protanopia-matrix"><feColorMatrix type="matrix" values="0.567, 0.433, 0, 0, 0  0.558, 0.442, 0, 0, 0  0, 0.242, 0.758, 0, 0  0, 0, 0, 1, 0"/></filter>
+        <filter id="deuteranopia-matrix"><feColorMatrix type="matrix" values="0.625, 0.375, 0, 0, 0  0.7, 0.3, 0, 0, 0  0, 0.3, 0.7, 0, 0  0, 0, 0, 1, 0"/></filter>
+        <filter id="tritanopia-matrix"><feColorMatrix type="matrix" values="0.95, 0.05, 0, 0, 0  0, 0.433, 0.567, 0, 0  0, 0.475, 0.525, 0, 0  0, 0, 0, 1, 0"/></filter>
+    </svg>
 
     <div class="theme-toggle">
-        <button class="btn-outline" style="padding: 10px; width: auto;" onclick="toggleTheme()">☀️ MODO CLARO</button>
+        <button class="btn-outline" style="padding: 10px; width: auto; margin: 0;" onclick="openAccessibilityScreen()" id="btn-acc-label">♿ ACESSIBILIDADE</button>
+        <button class="btn-outline" id="theme-btn" style="padding: 10px; width: auto; margin: 0;" onclick="toggleTheme()">☀️ MODO CLARO</button>
     </div>
 
+    <!-- TELA 1: PORTAL -->
     <div id="screen-gate" class="glass-panel active">
-        <h1>HÉRCULES</h1>
-        <div class="subtitle">O ÁPICE DA PERFORMANCE DIGITAL</div>
-        <button class="btn-gold" onclick="showScreen('screen-setup')">CRIAR CONTA MESTRE</button>
-        <button class="btn-outline" onclick="checkAccess()">ACESSAR O HUB</button>
-        <button class="btn-outline" onclick="showScreen('screen-project')">SOBRE O PROJETO</button>
+        <h1 id="main-title">HÉRCULES</h1>
+        <div class="subtitle" id="main-subtitle">O ÁPICE DA PERFORMANCE DIGITAL</div>
+        <button class="btn-primary" onclick="showScreen('screen-setup')" id="btn-create-master">CRIAR CONTA ANFITRIÃO</button>
+        <button class="btn-outline" onclick="checkAccess()" id="btn-access-hub">ACESSAR O HUB GESTOR</button>
+        <button class="btn-outline" onclick="showScreen('screen-project')" id="btn-credits">CRÉDITOS / SOBRE</button>
     </div>
 
-    <div id="screen-project" class="glass-panel">
-        <h1>O PROJETO</h1>
-        <div class="subtitle">POR QUE HÉRCULES?</div>
-        <div class="info-content">
-            <h3>Gestão de Elite</h3>
-            <p>O Hércules é uma central de comando para performance física. O site permite monitorar biometria e cargas em tempo real.</p>
-            <h3>Privacidade Total</h3>
-            <p>Seus dados nunca saem do seu navegador. Sem nuvens, sem logins externos, apenas você no controle absoluto.</p>
+    <!-- TELA DE ACESSIBILIDADE E PANTEÃO DOS DEUSES -->
+    <div id="screen-accessibility" class="glass-panel">
+        <h1 id="acc-header-title">ACESSIBILIDADE</h1>
+        <div class="subtitle" id="acc-header-sub">PERSONALIZAÇÃO DO PANTEÃO E VISÃO</div>
+        <div class="info-content" style="text-align: left;">
+            <h3 id="acc-sec1">1. Panteão dos Deuses (Temas e Identidade Visual)</h3>
+            <p id="acc-sec1-desc">Selecione a divindade regente:</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                <button class="btn-outline" onclick="setGodTheme('hercules', 'HÉRCULES')">🛡️ Semideus da Força: HÉRCULES</button>
+                <button class="btn-outline" onclick="setGodTheme('athena', 'ATHENA')">🦉 Deusa de Athenas: ATHENA</button>
+                <button class="btn-outline" onclick="setGodTheme('ares', 'ARES')">⚔️ Deus da Guerra: ARES</button>
+                <button class="btn-outline" onclick="setGodTheme('zeus', 'ZEUS')">⚡ Deus do Olympo: ZEUS</button>
+                <button class="btn-outline" onclick="setGodTheme('hermes', 'HERMES')">🍃 Semideus da Velocidade: HERMES</button>
+                <button class="btn-outline" onclick="setGodTheme('apolo', 'APOLO')">☀️ Deus do Sol: APOLO</button>
+            </div>
+            <button class="btn-outline" style="grid-column: span 2; width: 100%; border-color: #f59e0b; color: #f59e0b;" onclick="setGodTheme('jesus', getJesusName())" id="btn-jesus-name">✨ Reis dos Reis: Jesus</button>
+
+            <h3 id="acc-sec2" style="margin-top: 20px;">2. Idioma / Language / Lingua</h3>
+            <select id="lang-select" class="input-box" onchange="changeLanguage(this.value)">
+                <option value="pt">Português (Brasil)</option>
+                <option value="en">English (US)</option>
+                <option value="it">Italiano (Italia)</option>
+            </select>
+
+            <h3 id="acc-sec3" style="margin-top: 20px;">3. Correção de Cores para Daltonismo</h3>
+            <select id="dalton-select" class="input-box" onchange="applyDaltonFilter(this.value)">
+                <option value="none" id="d-none">Visão Padrão (Sem Filtro)</option>
+                <option value="protanopia" id="d-proto">Protanopia (Correção para vermelho/verde)</option>
+                <option value="deuteranopia" id="d-deut">Deuteranopia (Correção para verde/vermelho)</option>
+                <option value="tritanopia" id="d-trita">Tritanopia (Correção para azul/amarelo)</option>
+            </select>
         </div>
         <br>
-        <button class="btn-outline" onclick="showScreen('screen-gate')">VOLTAR AO INÍCIO</button>
+        <button class="btn-primary" onclick="saveAccessibility()" id="btn-save-acc">SALVAR E RETORNAR</button>
+        <button class="btn-outline" onclick="cancelAccessibility()" id="btn-cancel-acc">CANCELAR</button>
     </div>
 
+    <!-- TELA 2: CRÉDITOS / SOBRE -->
+    <div id="screen-project" class="glass-panel">
+        <h1 id="credits-main-title">CRÉDITOS / SOBRE</h1>
+        <div class="subtitle" id="credits-main-sub">EQUIPA E INFORMAÇÕES DO PROJETO</div>
+        
+        <div class="info-content" id="credits-body">
+            <h3>Desenvolvimento Proposto</h3>
+            <p><b>Professora:</b> Nadya Gorette</p>
+            
+            <h3>Gestão e Ideia</h3>
+            <p><b>Idealização e Gestão do Site:</b> Kevin</p>
+            
+            <h3>Desenvolvimento Técnico</h3>
+            <p><b>Desenvolvimento e Gestão do Site:</b> Davi Vitorio</p>
+            
+            <h3>Sobre o Site (HERCULES)</h3>
+            <p>O HERCULES foi desenvolvido como um projeto de escola para avaliação da professora Nadya. Trata-se de um software sem fins lucrativos (ainda não), cujo objetivo é atuar como um gestor completo de treinos para praticantes em casa, na academia ou em praças. Estamos em constante evolução e melhoria contínua. Esperamos que gostem do resultado!</p>
+        </div>
+        <br>
+        <button class="btn-outline" onclick="showScreen('screen-gate')" id="btn-credits-back">VOLTAR AO PORTAL</button>
+    </div>
+
+    <!-- TELA 3: CADASTRO ANFITRIÃO -->
     <div id="screen-setup" class="glass-panel">
-        <h1>MESTRE</h1>
-        <div class="subtitle">CRIE SUA CHAVE DE ACESSO</div>
+        <h1 id="setup-title">ANFITRIÃO</h1>
+        <div class="subtitle" id="setup-sub">DEFINIR CHAVE DE ACESSO CENTRAL</div>
         <div style="text-align: left;">
-            <span class="label">NOME DO GESTOR</span>
-            <input type="text" id="reg-u" class="input-box" placeholder="Ex: Kevin">
+            <span class="label" id="lbl-name-host">Qual o nome de vossa mercê?</span>
+            <input type="text" id="reg-u" class="input-box" placeholder="">
             <br><br>
-            <span class="label">SENHA MESTRE</span>
+            <span class="label" id="lbl-pass-host">SENHA MESTRE CONFIÁVEL (MÍNIMO 8 DÍGITOS)</span>
             <div class="pass-container">
-                <input type="password" id="reg-p" class="input-box" placeholder="Sua senha secreta">
-                <button class="eye-btn" onclick="togglePass('reg-p')">&lt;o&gt;</button>
+                <input type="password" id="reg-p" class="input-box" placeholder="">
+                <button class="eye-btn" onclick="togglePass('reg-p')"><o></button>
             </div>
             <br>
-            <button class="btn-gold" onclick="registerMaster()">CADASTRAR E ENTRAR DIRETO</button>
-            <button class="btn-outline" onclick="showScreen('screen-gate')">VOLTAR</button>
+            <button class="btn-primary" onclick="registerMaster()" id="btn-reg-submit">CADASTRAR E ENTRAR NO HUB</button>
+            <button class="btn-outline" onclick="showScreen('screen-gate')" id="btn-reg-cancel">CANCELAR</button>
         </div>
     </div>
 
+    <!-- TUTORIAL GUIADO -->
+    <div id="screen-tutorial" class="glass-panel">
+        <h1 id="tut-title">TUTORIAL DE BOAS-VINDAS</h1>
+        <div class="subtitle" id="tut-step-sub">PASSO 1 DE 3</div>
+        <div class="info-content" id="tut-content" style="text-align: center; font-size: 16px; padding: 20px 0;"></div>
+        <br>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-outline" onclick="skipTutorial()" id="btn-skip-tut">PULAR TUTORIAL</button>
+            <button class="btn-primary" onclick="nextTutorialStep()" id="tut-next-btn">PRÓXIMO PASSO</button>
+        </div>
+    </div>
+
+    <!-- TELA 4: LOGIN ANFITRIÃO -->
     <div id="screen-login" class="glass-panel">
-        <h1>ACESSO</h1>
-        <div class="subtitle">IDENTIFIQUE-SE</div>
+        <h1 id="login-title">ACESSO</h1>
+        <div class="subtitle" id="login-sub">AUTENTICAÇÃO DE SEGURANÇA</div>
         <div style="text-align: left;">
-            <span class="label">USUÁRIO</span>
+            <span class="label" id="lbl-log-u">USUÁRIO ANFITRIÃO</span>
             <input type="text" id="log-u" class="input-box">
             <br><br>
-            <span class="label">SENHA</span>
+            <span class="label" id="lbl-log-p">SENHA DE ACESSO</span>
             <div class="pass-container">
                 <input type="password" id="log-p" class="input-box">
-                <button class="eye-btn" onclick="togglePass('log-p')">&lt;o&gt;</button>
+                <button class="eye-btn" onclick="togglePass('log-p')"><o></button>
             </div>
             <br>
-            <button class="btn-gold" onclick="login()">ENTRAR NO HUB</button>
-            <button class="btn-outline" onclick="showScreen('screen-gate')">CANCELAR</button>
+            <button class="btn-primary" onclick="login()" id="btn-login-submit">AUTENTICAR</button>
+            <button class="btn-outline" onclick="showScreen('screen-gate')" id="btn-login-cancel">CANCELAR</button>
         </div>
     </div>
 
+    <!-- TELA 5: LOBBY HUB -->
     <div id="screen-lobby" class="glass-panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
             <div style="text-align: left;">
-                <span class="label" style="margin:0">GESTÃO MESTRE</span>
-                <b id="mestre-atual" style="color:var(--gold); font-size: 20px;">---</b>
+                <span class="label" style="margin:0" id="lbl-current-host">GESTÃO ANFITRIÃO ATUAL</span>
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px;">
+                    <b id="mestre-atual" style="color:var(--primary); font-size: 20px;">---</b>
+                    <span id="god-badge" style="font-size: 11px; padding: 2px 8px; border: 1px solid var(--primary); color: var(--primary); font-weight: 900;">(HÉRCULES)</span>
+                </div>
             </div>
-            <button class="btn-outline" style="width: auto; padding: 10px; margin:0;" onclick="preparaEdicaoMestre()">EDITAR GESTOR</button>
+            <button class="btn-outline" style="width: auto; padding: 10px; margin:0;" onclick="preparaEdicaoMestre()" id="btn-edit-master">EDITAR ANFITRIÃO</button>
         </div>
-        <h1 style="font-size: 24px;">MEUS ATLETAS</h1>
-        <div class="subtitle">BIOMETRIA E PERFORMANCE</div>
+        <h1 style="font-size: 24px;" id="hub-athletes-title">CENTRAL DE ATLETAS</h1>
+        <div class="subtitle" id="hub-athletes-sub">PERFIS E BIOMETRIAS REGISTRADAS</div>
         <div class="athletes-grid" id="athletes-container"></div>
-        <button class="btn-gold" onclick="openAddAthlete()">+ ADICIONAR NOVO PERFIL</button>
-        <button class="btn-outline" onclick="logout()">SAIR DO SISTEMA</button>
+        <button class="btn-primary" onclick="openAddAthlete()" id="btn-add-athlete">+ ADICIONAR NOVO ATLETA</button>
+        <button class="btn-outline" onclick="logout()" id="btn-logout">ENCERRAR SESSÃO</button>
     </div>
 
+    <!-- TELA 6: CONFIGURAÇÕES DO ANFITRIÃO -->
     <div id="screen-edit-master" class="glass-panel">
-        <h1>GESTÃO MESTRE</h1>
-        <div class="subtitle">ALTERAR CREDENCIAIS</div>
+        <h1 id="edit-master-title">PERFIL ANFITRIÃO</h1>
+        <div class="subtitle" id="edit-master-sub">ATUALIZAR CREDENCIAIS DO GESTOR</div>
         <div style="text-align: left;">
-            <span class="label">NOME ATUALIZADO</span>
+            <span class="label" id="lbl-edit-u">NOVO NOME ANFITRIÃO</span>
             <input type="text" id="edit-m-u" class="input-box">
             <br><br>
-            <span class="label">NOVA SENHA</span>
-            <input type="password" id="edit-m-p" class="input-box" placeholder="Mantenha vazio para não mudar">
+            <span class="label" id="lbl-edit-p">NOVA SENHA</span>
+            <input type="password" id="edit-m-p" class="input-box" placeholder="Deixe em branco para não alterar">
             <br><br>
-            <button class="btn-gold" onclick="updateMaster()">SALVAR E ATUALIZAR</button>
-            <button class="btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="deleteMaster()">EXCLUIR CONTA MESTRE</button>
-            <button class="btn-outline" onclick="showScreen('screen-lobby')">VOLTAR</button>
+            <button class="btn-primary" onclick="updateMaster()" id="btn-edit-save">SALVAR MODIFICAÇÕES</button>
+            <button class="btn-outline" style="color: var(--danger); border-color: var(--danger);" onclick="deleteMaster()" id="btn-edit-delete">APAGAR CONTA ANFITRIÃ</button>
+            <button class="btn-outline" onclick="showScreen('screen-lobby')" id="btn-edit-cancel">CANCELAR</button>
         </div>
     </div>
 
+    <!-- TELA 7: FORMULÁRIO DO ATLETA -->
     <div id="screen-athlete-form" class="glass-panel">
         <h1 id="form-title">PERFIL</h1>
-        <div class="subtitle">DADOS BIOMÉTRICOS</div>
+        <div class="subtitle" id="form-sub">INFORMAÇÕES BIOMÉTRICAS E METAS</div>
         <div class="form-row">
-            <div style="grid-column: span 2;"><span class="label">NOME</span><input type="text" id="a-nome" class="input-box"></div>
-            <div><span class="label">DATA NASC.</span><input type="date" id="a-nasc" class="input-box"></div>
-            <div><span class="label">GÊNERO</span><select id="a-sexo" class="input-box"><option value="M">MASCULINO</option><option value="F">FEMININO</option></select></div>
-            <div><span class="label">ALTURA (CM)</span><input type="number" id="a-alt" class="input-box" min="1"></div>
-            <div><span class="label">PESO (KG)</span><input type="number" id="a-peso" class="input-box" min="1"></div>
-            <div style="grid-column: span 2;"><span class="label">META</span><select id="a-meta" class="input-box">
-                <option value="HIPERTROFIA">HIPERTROFIA</option>
-                <option value="EMAGRECIMENTO">EMAGRECIMENTO</option>
-                <option value="DEFINICAO">DEFINIÇÃO</option>
-            </select></div>
-        </div>
-        <button class="btn-gold" onclick="saveAthlete()">SALVAR</button>
-        <button class="btn-outline" onclick="showScreen('screen-lobby')">CANCELAR</button>
-    </div>
+            <div style="grid-column: span 2;"><span class="label" id="lbl-a-name">NOME COMPLETO (APENAS TEXTO)</span><input type="text" id="a-nome" class="input-box" oninput="formatNameInput(this)"></div>
+            
+            <div>
+                <span class="label" id="lbl-a-dob">DATA DE NASCIMENTO</span>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 8px;">
+                    <input type="number" id="a-dia" class="input-box" placeholder="Dia" min="1" max="31">
+                    <input type="number" id="a-mes" class="input-box" placeholder="Mês" min="1" max="12">
+                    <input type="number" id="a-ano" class="input-box" placeholder="Ano" min="1900" max="2026">
+                </div>
+            </div>
 
-    <div id="screen-sheet" class="glass-panel">
-        <div class="sheet-header">
-            <div><h2 id="sh-name" style="color:var(--gold)">ATLETA</h2><p id="sh-bio" style="font-size: 11px; color: var(--text-dim)"></p></div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-outline" style="width: auto; padding: 10px;" onclick="editCurrentAthlete()">EDITAR</button>
-                <button class="btn-outline" style="width: auto; padding: 10px;" onclick="showScreen('screen-lobby')">VOLTAR</button>
+            <div>
+                <span class="label" id="lbl-a-gender">SEXO</span>
+                <select id="a-sexo" class="input-box">
+                    <option value="MASCULINO" id="opt-male">MASCULINO</option>
+                    <option value="FEMININO" id="opt-female">FEMININO</option>
+                </select>
+            </div>
+
+            <div><span class="label" id="lbl-a-height">ALTURA (CM)</span><input type="text" id="a-alt" class="input-box" placeholder="Ex: 1.75" oninput="formatNumberInput(this)"></div>
+            <div><span class="label" id="lbl-a-weight">PESO (KG)</span><input type="text" id="a-peso" class="input-box" placeholder="Ex: 70.5" oninput="formatNumberInput(this)"></div>
+            
+            <div style="grid-column: span 2;">
+                <span class="label" id="lbl-a-goal">META & GLOW UP</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <select id="a-meta" class="input-box" style="flex-grow: 1;" onchange="checkMetaAguaCustom()">
+                        <option value="MUSCULAÇÃO">MUSCULAÇÃO (Meta Padrão: 3500ml)</option>
+                        <option value="HIPERTROFIA">HIPERTROFIA (Meta Padrão: 3500ml)</option>
+                        <option value="EMAGRECIMENTO">EMAGRECIMENTO (Meta Padrão: 4000ml)</option>
+                        <option value="DEFINICAO">DEFINIÇÃO (Meta Padrão: 3800ml)</option>
+                        <option value="CALISTENIA">CALISTENIA (Meta Padrão: 3200ml)</option>
+                        <option value="FORÇA">TREINO DE FORÇA (Meta Padrão: 3600ml)</option>
+                        <option value="FUNCIONAL">TREINAMENTO FUNCIONAL (Meta Padrão: 3400ml)</option>
+                        <option value="YOGA">YOGA & FLEXIBILIDADE (Meta Padrão: 3000ml)</option>
+                        <option value="ZUMBA">ZUMBA & CARDIO RITMO (Meta Padrão: 3800ml)</option>
+                        <option value="TREINO LIVRE">TREINO LIVRE (Meta de Água Editável)</option>
+                    </select>
+                    <button class="btn-outline" style="width: auto; padding: 15px 20px; margin: 0; background: rgba(245, 158, 11, 0.1); color: var(--primary);" onclick="openGoalInfoModalFromSelect()" title="Informações sobre o treino">ℹ️ FOCO</button>
+                </div>
+            </div>
+
+            <div style="grid-column: span 2;" id="custom-water-container">
+                <span class="label" id="lbl-a-custom-water">META DE ÁGUA PERSONALIZADA (ML)</span>
+                <input type="number" id="a-agua-custom" class="input-box" value="3000" step="100" min="500">
             </div>
         </div>
-        <div id="workout-content" style="max-height: 500px; overflow-y: auto; padding-right: 10px;"></div>
+        <button class="btn-primary" onclick="saveAthlete()" id="btn-save-athlete">SALVAR PERFIL ATLETA</button>
+        <div id="delete-athlete-area"></div>
+        <button class="btn-outline" onclick="showScreen('screen-lobby')" id="btn-cancel-athlete">CANCELAR</button>
     </div>
 
+    <!-- TELA 8: PLANILHA DE SEGUIMENTO -->
+    <div id="screen-sheet" class="glass-panel">
+        <div class="sheet-header">
+            <div>
+                <h2 id="sh-name" style="color:var(--primary); font-size: 26px;">ATLETA</h2>
+                <p id="sh-bio" style="font-size: 12px; color: var(--text-dim); font-weight: bold; margin-top: 5px;"></p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; align-items: center;">
+                <button class="btn-outline" style="width: auto; padding: 10px 15px; margin: 0; border-color: var(--primary); background: rgba(245, 158, 11, 0.1);" onclick="openCurrentAthleteGoalInfo()" id="btn-guide-bib">ℹ️ GUIA & BIBLIOGRAFIA</button>
+                <button class="btn-outline" style="width: auto; padding: 10px; margin:0;" onclick="editCurrentAthlete()" id="btn-sheet-edit">EDITAR / EXCLUIR</button>
+                <button class="btn-outline" style="width: auto; padding: 10px; margin:0;" onclick="showScreen('screen-lobby')" id="btn-sheet-back">VOLTAR</button>
+            </div>
+        </div>
+
+        <div class="water-section">
+            <div class="water-header">
+                <div class="water-title" id="water-sec-title">💧 CONSUMO DE ÁGUA DIÁRIO</div>
+                <div id="water-num-display" style="font-size: 12px; font-weight: 800; color: var(--water);">0 / 3000 ml</div>
+            </div>
+            <div class="water-bar-wrapper">
+                <div class="water-bar-outer">
+                    <div class="water-bar-inner" id="water-bar-fill"></div>
+                    <div class="water-text" id="water-pct-text">0%</div>
+                </div>
+                <button class="btn-water" onclick="addWater(250)">+250ml</button>
+                <button class="btn-water" onclick="addWater(500)">+500ml</button>
+                <button class="btn-water-reset" onclick="resetWater()" id="btn-water-reset">🔄 REINICIAR</button>
+            </div>
+        </div>
+
+        <div id="workout-content" style="max-height: 400px; overflow-y: auto; padding-right: 10px;"></div>
+    </div>
+
+    <!-- TELA 9: DETALHES TÉCNICOS + CRONÔMETRO MINUTOS/SEGUNDOS -->
     <div id="screen-ex-detail" class="glass-panel">
-        <h1 id="det-name">DETALHES</h1>
-        <div class="subtitle">TÉCNICA E SEGURANÇA</div>
+        <h1 id="det-name">EXERCÍCIO</h1>
+        <div class="subtitle" id="det-sub">METODOLOGIA E CONTROLE DE TEMPO EDITÁVEL</div>
+        
+        <div style="margin: 15px 0; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <div>
+                <span class="label" style="margin-bottom:4px;" id="lbl-rest-min">MINUTOS:</span>
+                <input type="number" id="custom-rest-min" class="val-input" value="1" min="0" max="60" style="width: 80px;" onchange="validateRestInput()">
+            </div>
+            <div>
+                <span class="label" style="margin-bottom:4px;" id="lbl-rest-sec">SEGUNDOS (00-59):</span>
+                <input type="number" id="custom-rest-sec" class="val-input" value="0" min="0" max="59" style="width: 80px;" onchange="validateRestInput()" onkeyup="validateRestInput()">
+            </div>
+        </div>
+
+        <div class="timer-banner" id="timer-display">01:00</div>
+        <button class="btn-primary" style="padding: 12px; font-size: 12px;" onclick="startRestTimer()" id="timer-btn">INICIAR TEMPO DE DESCANSO</button>
+        
         <div class="info-content" id="det-content"></div>
         <br>
-        <button class="btn-outline" onclick="showScreen('screen-sheet')">VOLTAR</button>
+        <button class="btn-outline" onclick="stopTimerAndGoBack()" id="btn-det-back">VOLTAR PARA PLANILHA</button>
+    </div>
+
+    <!-- TELA 10: GUIA CIENTÍFICO E BIBLIOGRAFIA -->
+    <div id="screen-goal-info" class="glass-panel">
+        <h1 id="goal-info-title">GUIA DO OBJETIVO</h1>
+        <div class="subtitle" id="goal-info-sub">CIÊNCIA, PRÁTICA E REFERÊNCIAS BIBLIOGRÁFICAS</div>
+        
+        <div class="info-content" id="goal-info-body"></div>
+        <br>
+        <button class="btn-outline" onclick="closeGoalInfo()" id="btn-goal-back">VOLTAR</button>
     </div>
 
     <script>
-        let athletes = JSON.parse(localStorage.getItem('hercules_athletes')) || [];
+        let mastersList = JSON.parse(localStorage.getItem('hercules_v15_masters')) || [];
+        let currentMaster = JSON.parse(localStorage.getItem('hercules_v15_current_master')) || null;
+        let athletes = JSON.parse(localStorage.getItem('hercules_v15_athletes')) || [];
         let currentAthleteId = null;
+        let timerInterval = null;
+        let restTimeSeconds = 60;
+        let previousScreenId = 'screen-gate';
+        
+        let currentGod = localStorage.getItem('hercules_global_god') || 'hercules';
+        let currentGodName = localStorage.getItem('hercules_global_godname') || 'HÉRCULES';
+        let isLightMode = localStorage.getItem('hercules_global_light') === 'true';
+        let currentLang = localStorage.getItem('hercules_global_lang') || 'pt';
+
+        let tempGod = currentGod;
+        let tempGodName = currentGodName;
+        let tempLang = currentLang;
+
+        function getJesusName() {
+            if(currentLang === 'en') return "Jesus: King of Kings";
+            if(currentLang === 'it') return "Re dei Re: Gesù";
+            return "Reis dos Reis: Jesus";
+        }
+
+        const translations = {
+            pt: {
+                acc: "ACESSIBILIDADE", subAcc: "PERSONALIZAÇÃO DO PANTEÃO E VISÃO",
+                credits: "CRÉDITOS / SOBRE", subCredits: "EQUIPA E INFORMAÇÕES DO PROJETO",
+                host: "ANFITRIÃO", subHost: "DEFINIR CHAVE DE ACESSO CENTRAL",
+                login: "ACESSO", subLogin: "AUTENTICAÇÃO DE SEGURANÇA",
+                hub: "CENTRAL DE ATLETAS", subHub: "PERFIS E BIOMETRIAS REGISTRADAS",
+                profile: "PERFIL", subProfile: "INFORMAÇÕES BIOMÉTRICAS E METAS",
+                btnCreate: "CRIAR CONTA ANFITRIÃO", btnAccess: "ACESSAR O HUB GESTOR", btnCredits: "CRÉDITOS / SOBRE",
+                btnSave: "SALVAR E RETORNAR", btnCancel: "CANCELAR", btnBack: "VOLTAR AO PORTAL",
+                lblName: "Qual o nome de vossa mercê?", lblPass: "SENHA MESTRE CONFIÁVEL (MÍNIMO 8 DÍGITOS)",
+                btnAdd: "+ ADICIONAR NOVO ATLETA", btnLogout: "ENCERRAR SESSÃO", btnEdit: "EDITAR ANFITRIÃO",
+                btnSaveAthlete: "SALVAR PERFIL ATLETA", btnGuideBib: "ℹ️ GUIA & BIBLIOGRAFIA",
+                waterTitle: "💧 CONSUMO DE ÁGUA DIÁRIO", btnReset: "🔄 REINICIAR",
+                lblMin: "MINUTOS:", lblSec: "SEGUNDOS (00-59):", btnTimer: "INICIAR TEMPO DE DESCANSO",
+                btnBackSheet: "VOLTAR PARA PLANILHA", logoutMsg: "Até logo! / A presto!",
+                creditsHTML: `
+                    <h3>Desenvolvimento Proposto</h3>
+                    <p><b>Professora:</b> Nadya Gorette</p>
+                    <h3>Gestão e Ideia</h3>
+                    <p><b>Idealização e Gestão do Site:</b> Kevin</p>
+                    <h3>Desenvolvimento Técnico</h3>
+                    <p><b>Desenvolvimento e Gestão do Site:</b> Davi Vitorio</p>
+                    <h3>Sobre o Site (HERCULES)</h3>
+                    <p>O HERCULES foi desenvolvido como um projeto de escola para avaliação da professora Nadya. Trata-se de um software sem fins lucrativos (ainda não), cujo objetivo é atuar como um gestor completo de treinos para praticantes em casa, na academia ou em praças. Estamos em constante evolução e melhoria contínua. Esperamos que gostem do resultado!</p>
+                `,
+                days: ["SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA - DESCANSO ATIVO", "QUINTA-FEIRA", "SEXTA-FEIRA"],
+                exercises: {
+                    "Supino Reto": "Supino Reto", "Agachamento": "Agachamento", "Levantamento Terra": "Levantamento Terra",
+                    "Puxada Alta": "Puxada Alta", "Burpees": "Burpees", "Caminhada": "Caminhada"
+                }
+            },
+            en: {
+                acc: "ACCESSIBILITY", subAcc: "PANTHEON & VISION CUSTOMIZATION",
+                credits: "CREDITS / ABOUT", subCredits: "TEAM & PROJECT INFORMATION",
+                host: "HOST", subHost: "SET CENTRAL ACCESS KEY",
+                login: "ACCESS", subLogin: "SECURITY AUTHENTICATION",
+                hub: "ATHLETE HUB", subHub: "REGISTERED PROFILES & BIOMETRICS",
+                profile: "PROFILE", subProfile: "BIOMETRIC INFORMATION & GOALS",
+                btnCreate: "CREATE HOST ACCOUNT", btnAccess: "ACCESS MANAGER HUB", btnCredits: "CREDITS / ABOUT",
+                btnSave: "SAVE AND RETURN", btnCancel: "CANCEL", btnBack: "BACK TO PORTAL",
+                lblName: "What is your honorable name?", lblPass: "RELIABLE MASTER PASSWORD (MIN 8 DIGITS)",
+                btnAdd: "+ ADD NEW ATHLETE", btnLogout: "LOG OUT", btnEdit: "EDIT HOST",
+                btnSaveAthlete: "SAVE ATHLETE PROFILE", btnGuideBib: "ℹ️ GUIDE & BIBLIOGRAPHY",
+                waterTitle: "💧 DAILY WATER INTAKE", btnReset: "🔄 RESET",
+                lblMin: "MINUTES:", lblSec: "SECONDS (00-59):", btnTimer: "START REST TIME",
+                btnBackSheet: "BACK TO WORKOUT SHEET", logoutMsg: "Até logo! / A presto!",
+                creditsHTML: `
+                    <h3>Proposed Development</h3>
+                    <p><b>Teacher:</b> Nadya Gorette</p>
+                    <h3>Management & Idea</h3>
+                    <p><b>Idea and Website Management:</b> Kevin</p>
+                    <h3>Technical Development</h3>
+                    <p><b>Development and Website Management:</b> Davi Vitorio</p>
+                    <h3>About the Website (HERCULES)</h3>
+                    <p>HERCULES was developed as a school project for teacher Nadya's evaluation. It is a non-profit software (not yet) designed to act as a complete workout manager for training at home, gym, or public parks. We are constantly improving it. We hope you enjoy the result!</p>
+                `,
+                days: ["MONDAY", "TUESDAY", "WEDNESDAY - ACTIVE REST", "THURSDAY", "FRIDAY"],
+                exercises: {
+                    "Supino Reto": "Bench Press", "Agachamento": "Squat", "Levantamento Terra": "Deadlift",
+                    "Puxada Alta": "Lat Pulldown", "Burpees": "Burpees", "Caminhada": "Walking"
+                }
+            },
+            it: {
+                acc: "ACCESSIBILITÀ", subAcc: "PERSONALIZZAZIONE DEL PANTHEON E VISIONE",
+                credits: "CREDITI / INFORMAZIONI", subCredits: "TEAM E INFORMAZIONI SUL PROGETTO",
+                host: "OSPITE", subHost: "IMPOSTA CHIAVE DI ACCESSO CENTRALE",
+                login: "ACCESSO", subLogin: "AUTENTICAZIONE DI SICUREZZA",
+                hub: "HUB ATLETI", subHub: "PROFILI E BIOMETRIE REGISTRATE",
+                profile: "PROFILO", subProfile: "INFORMAzioni BIOMETRICHE E OBIETTIVI",
+                btnCreate: "CREA ACCOUNT OSPITE", btnAccess: "ACCEDI ALL'HUB GESTORE", btnCredits: "CREDITI / INFORMAZIONI",
+                btnSave: "SALVA E TORNA", btnCancel: "CANCELLA", btnBack: "TORNA AL PORTALE",
+                lblName: "Qual è il tuo nome onorevole?", lblPass: "PASSWORD MASTER AFFIDABILE (MIN 8 CIFRE)",
+                btnAdd: "+ AGGIUNGI NUOVO ATLETA", btnLogout: "ESCI", btnEdit: "MODIFICA OSPITE",
+                btnSaveAthlete: "SALVA PROFILO ATLETA", btnGuideBib: "ℹ️ GUIDA E BIBLIOGRAFIA",
+                waterTitle: "💧 CONSUMO GIORNALIERO DI ACQUA", btnReset: "🔄 RIPRISTINA",
+                lblMin: "MINUTI:", lblSec: "SECONDI (00-59):", btnTimer: "AVVIA RIPOSO",
+                btnBackSheet: "TORNA ALLA SCHEDA", logoutMsg: "Até logo! / A presto!",
+                creditsHTML: `
+                    <h3>Sviluppo Proposto</h3>
+                    <p><b>Insegnante:</b> Nadya Gorette</p>
+                    <h3>Gestione e Idea</h3>
+                    <p><b>Ideazione e Gestione del Sito:</b> Kevin</p>
+                    <h3>Sviluppo Tecnico</h3>
+                    <p><b>Sviluppo e Gestione del Sito:</b> Davi Vitorio</p>
+                    <h3>Informazioni sul Sito (HERCULES)</h3>
+                    <p>HERCULES è stato sviluppato come progetto scolastico per la valutazione della professoressa Nadya. È un software senza scopo di lucro (per ora) progettato per fungere da gestore completo di allenamenti a casa, in palestra o nei parchi. Siamo in costante miglioramento. Speriamo che vi piaccia il risultato!</p>
+                `,
+                days: ["LUNEDÌ", "MARTEDÌ", "MERCOLEDÌ - RIPOSO ATTIVO", "GIOVEDÌ", "VENERDÌ"],
+                exercises: {
+                    "Supino Reto": "Panca Piana", "Agachamento": "Squat", "Levantamento Terra": "Stacco da Terra",
+                    "Puxada Alta": "Lat Machine", "Burpees": "Burpees", "Caminhada": "Camminata"
+                }
+            }
+        };
 
         const dbTreinos = {
-            "Supino Reto": { foco: "Peitorais e Tríceps", exec: "Desça a barra até o peito.", seg: "Mantenha os pés no chão." },
-            "Agachamento": { foco: "Quadríceps e Glúteos", exec: "Quadril para trás e desça.", seg: "Coluna reta sempre." },
-            "Levantamento Terra": { foco: "Cadeia Posterior e Core", exec: "Puxe do chão com a força das pernas.", seg: "Não curve a lombar." },
-            "Puxada Alta": { foco: "Dorsais e Bíceps", exec: "Puxe a barra em direção ao peito.", seg: "Não use o balanço do corpo." },
-            "Burpees": { foco: "Cardio e Explosão", exec: "Chão, flexão, salto.", seg: "Amorteça a queda." },
-            "Caminhada": { foco: "Resistência", exec: "Passo firme acelerado.", seg: "Calçados adequados." }
+            "Supino Reto": { 
+                pt: { foco: "Peitoral Maior, Deltóide Anterior e Tríceps.", exec: "Deite-se no banco, desça a barra controladamente ao peito e empurre para cima.", seg: "Mantenha as escápulas retraídas e os pés firmes." },
+                en: { foco: "Pectoralis Major, Anterior Deltoid, and Triceps.", exec: "Lie on the bench, lower the bar controlled to your chest, and press upward.", seg: "Keep scapulae retracted and feet planted firmly." },
+                it: { foco: "Pettorale Maggiore, Deltoide Anteriore e Tricipiti.", exec: "Sdraiati sulla panca, abbassa il bilanciere al petto e spingi verso l'alto.", seg: "Tieni le scapole retratte e i piedi ben saldi." }
+            },
+            "Agachamento": { 
+                pt: { foco: "Quadríceps, Glúteos e Core.", exec: "Barra nos trapézios, desça projetando o quadril para trás.", seg: "Coluna neutra e joelhos alinhados." },
+                en: { foco: "Quadriceps, Glutes, and Core.", exec: "Bar on traps, squat down extending hips backward.", seg: "Keep spine neutral and knees aligned." },
+                it: { foco: "Quadricipiti, Glutei e Core.", exec: "Bilanciere sui trapezioni, scendi spingendo i fianchi all'indietro.", seg: "Mantieni la colonna neutra e le ginocchia allineate." }
+            },
+            "Levantamento Terra": { 
+                pt: { foco: "Cadeia Posterior e Lombar.", exec: "Puxe a barra do solo estendendo joelhos e quadril simultaneamente.", seg: "Mantenha a lombar firme e travada." },
+                en: { foco: "Posterior Chain and Lower Back.", exec: "Lift bar off the floor extending knees and hips simultaneously.", seg: "Keep lower back tight and engaged." },
+                it: { foco: "Catena Posteriore e Lombari.", exec: "Solleva il bilanciere estendendo ginocchia e anche contemporaneamente.", seg: "Mantieni la parte bassa della schiena rigida." }
+            },
+            "Puxada Alta": { 
+                pt: { foco: "Grande Dorsal e Bíceps.", exec: "Puxe a barra em direção à clavícula.", seg: "Evite balançar o tronco excessivamente." },
+                en: { foco: "Latissimus Dorsi and Biceps.", exec: "Pull bar down toward upper chest/clavicle.", seg: "Avoid swinging your torso excessively." },
+                it: { foco: "Gran Dorsale e Bicipiti.", exec: "Tira la sbarra verso la clavicola.", seg: "Evita di oscillare eccessivamente con il busto." }
+            },
+            "Burpees": { 
+                pt: { foco: "Cardio e Potência.", exec: "Flexão de solo seguida de salto vertical.", seg: "Core contraído para proteger a lombar." },
+                en: { foco: "Cardio and Power.", exec: "Push-up on floor followed by explosive vertical jump.", seg: "Brace core to protect lower back." },
+                it: { foco: "Cardio e Potenza.", exec: "Piegamento a terra seguito da salto verticale esplosivo.", seg: "Contrai il core per proteggere la schiena." }
+            },
+            "Caminhada": { 
+                pt: { foco: "Resistência Aeróbica.", exec: "Passada firme e constante.", seg: "Calçado adequado para impacto." },
+                en: { foco: "Aerobic Endurance.", exec: "Brisk, constant pace.", seg: "Use proper supportive footwear." },
+                it: { foco: "Resistenza Aerobica.", exec: "Passo deciso e costante.", seg: "Usa calzature adatte." }
+            }
+        };
+
+        const metasAguaPadrao = { "MUSCULAÇÃO": 3500, "HIPERTROFIA": 3500, "EMAGRECIMENTO": 4000, "DEFINICAO": 3800, "CALISTENIA": 3200, "FORÇA": 3600, "FUNCIONAL": 3400, "YOGA": 3000, "ZUMBA": 3800, "TREINO LIVRE": 3000 };
+
+        const dbMetasInfo = {
+            "FUNCIONAL": {
+                titulo: "Treinamento Funcional (Glow Up & Performance)",
+                foco: "Desenvolvimento de padrões de movimento integrados, melhorando agilidade, estabilidade central, equilíbrio e postura diária.",
+                local: "Academia, em casa ou ao ar livre com acessórios leves.",
+                alimentacao: "Dieta rica em antioxidantes, carboidratos complexos e proteínas magras para recuperação ágil.",
+                biblio: "ACE Fitness. (2014). Functional Training. American Council on Exercise.<br><a href='https://www.acefitness.org/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 ACE Fitness Research</a>"
+            },
+            "YOGA": {
+                titulo: "Yoga & Flexibilidade",
+                foco: "Expansão da amplitude de movimento articular, alívio de estresse tensional e fortalecimento isométrico.",
+                local: "Perfeito para ambientes tranquilos em casa ou estúdios.",
+                alimentacao: "Alimentação leve, rica em vegetais, hidratação constante e alimentos de fácil digestão.",
+                biblio: "World Journal of Methodol. (2026). Comprehensive review on yoga.<br><a href='https://pubmed.ncbi.nlm.nih.gov/42058806/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 PubMed Clinical Review</a>"
+            },
+            "ZUMBA": {
+                titulo: "Zumba & Cardio Ritmo",
+                foco: "Gasto calórico elevado, melhora cardiorrespiratória e liberação de endorfina através de dança aeróbica intervalada.",
+                local: "Em casa ou salas amplas.",
+                alimentacao: "Reposição adequada de eletrólitos, carboidratos de rápida absorção pré-treino e hidratação rigorosa.",
+                biblio: "ACSM. (2025). High-Intensity Dance Fitness and Metabolic Response.<br><a href='https://pubmed.ncbi.nlm.nih.gov/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 ACSM Guidelines</a>"
+            },
+            "MUSCULAÇÃO": {
+                titulo: "Musculação Geral e Saúde",
+                foco: "Melhoria da composição corporal, densidade óssea, condicionamento físico geral e longevidade através de exercícios resistidos.",
+                local: "Academia ou centros de treinamento equipados.",
+                alimentacao: "Dieta balanceada com proteínas de alto valor biológico e carboidratos moderados.",
+                biblio: "Westcott, W. L. (2012). Resistance training is medicine. Current Sports Medicine Reports.<br><a href='https://pubmed.ncbi.nlm.nih.gov/22777332/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 Acessar Estudo no PubMed</a>"
+            },
+            "HIPERTROFIA": {
+                titulo: "Hipertrofia Muscular",
+                foco: "Aumento da seção transversa das fibras musculares através de tensão mecânica progressiva e estresse metabólico.",
+                local: "Academia (recomendado para uso de cargas progressivas).",
+                alimentacao: "Superávit calórico moderado e alto consumo de proteínas (1.6g a 2.2g por kg).",
+                biblio: "Schoenfeld, B. J. (2010). Mechanisms of muscle hypertrophy. Journal of Strength and Conditioning Research.<br><a href='https://pubmed.ncbi.nlm.nih.gov/20847704/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 Acessar Estudo no PubMed</a>"
+            },
+            "EMAGRECIMENTO": {
+                titulo: "Emagrecimento e Déficit Calórico",
+                foco: "Redução do percentual de gordura corporal mantendo a massa magra através de gasto energético e nutrição.",
+                local: "Casa ou academia.",
+                alimentacao: "Déficit calórico controlado, priorizando fibras, vegetais e proteínas.",
+                biblio: "Hall, K. D., & Guo, J. (2017). Obesity energetics. Gastroenterology.<br><a href='https://pubmed.ncbi.nlm.nih.gov/28705844/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 Acessar Estudo no PubMed</a>"
+            },
+            "DEFINICAO": {
+                titulo: "Definição Muscular",
+                foco: "Evidenciação da musculatura através da diminuição da gordura subcutânea sem perda de tônus.",
+                local: "Academia ou HIIT em casa.",
+                alimentacao: "Dieta normocalórica ou leve déficit, alta ingestão proteica.",
+                biblio: "Campbell, B. I., et al. (2018). High protein diet on body composition. Sports.<br><a href='https://pubmed.ncbi.nlm.nih.gov/29967351/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 Acessar Estudo no PubMed</a>"
+            },
+            "CALISTENIA": {
+                titulo: "Calistenia (Peso Corporal)",
+                foco: "Força funcional, estabilização articular e controle corporal usando o próprio peso.",
+                local: "Casa, praças ou parques.",
+                alimentacao: "Dieta equilibrada com micronutrientes e hidratação.",
+                biblio: "Kotarsky, C. J., et al. (2018). Suspension training program. Journal of Human Kinetics.<br><a href='https://pubmed.ncbi.nlm.nih.gov/30154941/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 Acessar Estudo no PubMed</a>"
+            },
+            "FORÇA": {
+                titulo: "Treino de Força Máxima",
+                foco: "Recrutamento neural máximo e adaptação neuromuscular com cargas elevadas.",
+                local: "Academia especializada.",
+                alimentacao: "Dieta hipercalórica limpa com creatina e suporte ao SNC.",
+                biblio: "Rhea, M. R., et al. (2003). Dose response for strength development. Medicine & Science in Sports & Exercise.<br><a href='https://pubmed.ncbi.nlm.nih.gov/12544843/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 Acessar Estudo no PubMed</a>"
+            },
+            "TREINO LIVRE": {
+                titulo: "Treino Livre Personalizado",
+                foco: "Flexibilidade total na escolha de exercícios, cargas e metas hídricas.",
+                local: "Qualquer ambiente.",
+                alimentacao: "Nutrição adaptada aos objetivos particulares.",
+                biblio: "ACSM. (2009). Progression models in resistance training.<br><a href='https://pubmed.ncbi.nlm.nih.gov/19204579/' target='_blank' style='color:var(--primary); font-weight:bold;'>🔗 ACSM Guidelines</a>"
+            }
         };
 
         function showScreen(id) {
+            const activeNow = document.querySelector('.glass-panel.active');
+            if (activeNow && activeNow.id !== 'screen-accessibility') {
+                previousScreenId = activeNow.id;
+            }
             document.querySelectorAll('.glass-panel').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(id === 'screen-lobby') renderLobby();
         }
 
-        function togglePass(id) { const x = document.getElementById(id); x.type = x.type === "password" ? "text" : "password"; }
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        function calculateAge(dob) { return Math.abs(new Date(Date.now() - new Date(dob).getTime()).getUTCFullYear() - 1970); }
-
-        function registerMaster() {
-            const u = document.getElementById('reg-u').value;
-            const p = document.getElementById('reg-p').value;
-            if(!u || !p) return alert("Preencha!");
-            localStorage.setItem('hercules_master', JSON.stringify({user: u, pass: p}));
-            showScreen('screen-lobby');
+        function openAccessibilityScreen() {
+            tempGod = currentGod;
+            tempGodName = currentGodName;
+            tempLang = currentLang;
+            showScreen('screen-accessibility');
         }
 
+        function saveAccessibility() {
+            currentGod = tempGod;
+            currentGodName = tempGodName;
+            currentLang = tempLang;
+            localStorage.setItem('hercules_global_god', currentGod);
+            localStorage.setItem('hercules_global_godname', currentGodName);
+            localStorage.setItem('hercules_global_lang', currentLang);
+            applyThemeState();
+            applyLanguage();
+            showScreen(previousScreenId || 'screen-gate');
+        }
+
+        function cancelAccessibility() {
+            tempGod = currentGod;
+            tempGodName = currentGodName;
+            tempLang = currentLang;
+            applyThemeState();
+            applyLanguage();
+            showScreen(previousScreenId || 'screen-gate');
+        }
+
+        function togglePass(id) { const x = document.getElementById(id); x.type = x.type === "password" ? "text" : "password"; }
+        
+        function toggleTheme() { 
+            if(currentGod === 'jesus') {
+                alert(currentLang === 'en' ? "✨ Alteration not allowed, for with My Lord I shall never walk in darkness." : currentLang === 'it' ? "✨ Modifica non consentita, con il Signore non camminerai mai nell'oscurità." : "✨ Alteração não permitida, pois com Meu Senhor nunca andarei na escuridão.");
+                return;
+            }
+            isLightMode = !isLightMode;
+            localStorage.setItem('hercules_global_light', isLightMode);
+            applyThemeState();
+        }
+
+        function changeLanguage(lang) {
+            tempLang = lang;
+            if(tempGod === 'jesus') {
+                tempGodName = getJesusName();
+            }
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const activeL = tempLang || currentLang;
+            const t = translations[activeL] || translations.pt;
+            
+            document.getElementById('btn-acc-label').innerText = activeL === 'en' ? "♿ ACCESSIBILITY" : activeL === 'it' ? "♿ ACCESSIBILITÀ" : "♿ ACESSIBILIDADE";
+            document.getElementById('btn-create-master').innerText = t.btnCreate;
+            document.getElementById('btn-access-hub').innerText = t.btnAccess;
+            document.getElementById('btn-credits').innerText = t.btnCredits;
+            document.getElementById('btn-save-acc').innerText = t.btnSave;
+            document.getElementById('btn-cancel-acc').innerText = t.btnCancel;
+            document.getElementById('btn-credits-back').innerText = t.btnBack;
+            document.getElementById('setup-title').innerText = t.host;
+            document.getElementById('setup-sub').innerText = t.subHost;
+            document.getElementById('lbl-name-host').innerText = t.lblName;
+            document.getElementById('lbl-pass-host').innerText = t.lblPass;
+            document.getElementById('btn-reg-submit').innerText = t.btnCreate;
+            document.getElementById('btn-reg-cancel').innerText = t.btnCancel;
+            document.getElementById('login-title').innerText = t.login;
+            document.getElementById('login-sub').innerText = t.subLogin;
+            document.getElementById('btn-login-submit').innerText = activeL === 'en' ? "AUTHENTICATE" : activeL === 'it' ? "AUTENTICA" : "AUTENTICAR";
+            document.getElementById('btn-login-cancel').innerText = t.btnCancel;
+            document.getElementById('hub-athletes-title').innerText = t.hub;
+            document.getElementById('hub-athletes-sub').innerText = t.subHub;
+            document.getElementById('btn-add-athlete').innerText = t.btnAdd;
+            document.getElementById('btn-logout').innerText = t.btnLogout;
+            document.getElementById('btn-edit-master').innerText = t.btnEdit;
+            document.getElementById('form-title').innerText = t.profile;
+            document.getElementById('form-sub').innerText = t.subProfile;
+            document.getElementById('btn-save-athlete').innerText = t.btnSaveAthlete;
+            document.getElementById('btn-cancel-athlete').innerText = t.btnCancel;
+            document.getElementById('btn-guide-bib').innerText = t.btnGuideBib;
+            document.getElementById('water-sec-title').innerText = t.waterTitle;
+            document.getElementById('btn-water-reset').innerText = t.btnReset;
+            document.getElementById('lbl-rest-min').innerText = t.lblMin;
+            document.getElementById('lbl-rest-sec').innerText = t.lblSec;
+            document.getElementById('timer-btn').innerText = t.btnTimer;
+            document.getElementById('btn-det-back').innerText = t.btnBackSheet;
+            document.getElementById('lang-select').value = activeL;
+            document.getElementById('btn-jesus-name').innerText = `✨ ${getJesusName()}`;
+
+            document.getElementById('credits-main-title').innerText = t.credits;
+            document.getElementById('credits-main-sub').innerText = t.subCredits;
+            document.getElementById('credits-body').innerHTML = t.creditsHTML;
+
+            if(currentAthleteId) {
+                openSheet(currentAthleteId);
+            }
+        }
+
+        function applyThemeState() {
+            const body = document.body;
+            const btn = document.getElementById('theme-btn');
+            const activeG = tempGod || currentGod;
+            const activeGName = (activeG === 'jesus') ? getJesusName() : (tempGodName || currentGodName);
+            
+            body.className = `theme-${activeG}`;
+            if(activeG === 'jesus') {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'block';
+            }
+
+            const activeL = tempLang || currentLang;
+            if(isLightMode) {
+                body.classList.add('light-mode');
+                btn.innerText = activeL === 'en' ? "🌙 DARK MODE" : activeL === 'it' ? "🌙 MODALITÀ SCURA" : "🌙 MODO ESCURO";
+            } else {
+                btn.innerText = activeL === 'en' ? "☀️ LIGHT MODE" : activeL === 'it' ? "☀️ MODALITÀ CHIARA" : "☀️ MODO CLARO";
+            }
+
+            document.getElementById('main-title').innerText = activeGName;
+            document.getElementById('page-title').innerText = `${activeGName} - DIGITAL PERFORMANCE`;
+        }
+
+        function setGodTheme(god, name) {
+            tempGod = god;
+            tempGodName = (god === 'jesus') ? getJesusName() : name;
+            
+            if(god === 'jesus') {
+                isLightMode = true;
+                localStorage.setItem('hercules_global_light', 'true');
+            }
+
+            applyThemeState();
+            const activeL = tempLang || currentLang;
+            alert(activeL === 'en' ? `⚡ Domain selected: ${tempGodName}!` : activeL === 'it' ? `⚡ Dominio selezionato: ${tempGodName}!` : `⚡ Domínio selecionado: ${tempGodName}!`);
+        }
+
+        function applyDaltonFilter(type) {
+            document.body.classList.remove('dalton-protanopia', 'dalton-deuteranopia', 'dalton-tritanopia');
+            if(type !== 'none') document.body.classList.add(`dalton-${type}`);
+        }
+
+        function formatNameInput(input) { input.value = input.value.replace(/[0-9]/g, ''); }
+        function formatNumberInput(input) { input.value = input.value.replace(/[^0-9.]/g, ''); }
+
+        function calculateAgeFromParts(d, m, y) {
+            if(!d || !m || !y) return 0;
+            const dob = new Date(`${y}-${m}-${d}`);
+            return Math.abs(new Date(Date.now() - dob.getTime()).getUTCFullYear() - 1970);
+        }
+
+        function checkMetaAguaCustom() {
+            const meta = document.getElementById('a-meta').value;
+            const box = document.getElementById('custom-water-container');
+            box.style.display = (meta === "TREINO LIVRE") ? "block" : "none";
+        }
+
+        function openGoalInfoModalFromSelect() {
+            const meta = document.getElementById('a-meta').value;
+            showGoalInfoModal(meta);
+        }
+
+        function openCurrentAthleteGoalInfo() {
+            const a = athletes.find(x => x.id === currentAthleteId);
+            if(a) showGoalInfoModal(a.meta);
+        }
+
+        function showGoalInfoModal(metaKey) {
+            const info = dbMetasInfo[metaKey] || dbMetasInfo["FUNCIONAL"];
+            const activeL = tempLang || currentLang;
+            document.getElementById('goal-info-title').innerText = info.titulo.toUpperCase();
+            document.getElementById('goal-info-body').innerHTML = `
+                <h3>${activeL === 'en' ? 'Training Focus' : activeL === 'it' ? 'Focus dell\'Allenamento' : 'Foco do Treino'}</h3>
+                <p>${info.foco}</p>
+                <h3>${activeL === 'en' ? 'Practice Location' : activeL === 'it' ? 'Luogo di Pratica' : 'Local de Prática'}</h3>
+                <p>${info.local}</p>
+                <h3>${activeL === 'en' ? 'Recommended Nutrition' : activeL === 'it' ? 'Nutrizione Consigliata' : 'Alimentação Recomendada'}</h3>
+                <p>${info.alimentacao}</p>
+                <h3>${activeL === 'en' ? 'Scientific Bibliography' : activeL === 'it' ? 'Bibliografia Scientifica' : 'Bibliografia e Estudos Científicos'}</h3>
+                <p>${info.biblio}</p>
+            `;
+            showScreen('screen-goal-info');
+        }
+
+        function closeGoalInfo() {
+            if(currentAthleteId) showScreen('screen-sheet');
+            else showScreen('screen-athlete-form');
+        }
+
+        function registerMaster() {
+            const u = document.getElementById('reg-u').value.trim();
+            const p = document.getElementById('reg-p').value.trim();
+            const activeL = tempLang || currentLang;
+            if(!u || !p) return alert(activeL === 'en' ? "Please fill in all fields." : activeL === 'it' ? "Compila tutti i campi." : "Preencha todos os campos.");
+            
+            if(mastersList.some(m => m.user.toLowerCase() === u.toLowerCase())) {
+                return alert(activeL === 'en' ? "A host with this name already exists." : activeL === 'it' ? "Esiste già un ospite con questo nome." : "Já existe um anfitrião com este nome.");
+            }
+
+            if(p.length < 8) {
+                if(!confirm(activeL === 'en' ? "⚠️ WARNING: Password has less than 8 digits. Continue anyway?" : activeL === 'it' ? "⚠️ ATTENZIONE: Password inferiore a 8 cifre. Vuoi continuare?" : "⚠️ AVISO: Sua senha possui menos de 8 dígitos e é muito curta. Deseja continuar mesmo assim?")) return;
+            }
+
+            const newMaster = { user: u, pass: p };
+            mastersList.push(newMaster);
+            currentMaster = newMaster;
+            localStorage.setItem('hercules_v15_masters', JSON.stringify(mastersList));
+            localStorage.setItem('hercules_v15_current_master', JSON.stringify(currentMaster));
+            
+            document.getElementById('reg-u').value = '';
+            document.getElementById('reg-p').value = '';
+            
+            startTutorialSequence();
+        }
+
+        let tutStep = 1;
+        function startTutorialSequence() {
+            tutStep = 1;
+            updateTutorialContent();
+            showScreen('screen-tutorial');
+        }
+
+        function updateTutorialContent() {
+            const content = document.getElementById('tut-content');
+            const sub = document.getElementById('tut-step-sub');
+            const btn = document.getElementById('tut-next-btn');
+            const activeL = tempLang || currentLang;
+
+            if(tutStep === 1) {
+                sub.innerText = activeL === 'en' ? "STEP 1 OF 3" : activeL === 'it' ? "PASSO 1 DI 3" : "PASSO 1 DE 3";
+                content.innerHTML = activeL === 'en' ? "🏛️ <b>Welcome to the Pantheon!</b> Register your athletes and manage biometrics easily." : activeL === 'it' ? "🏛️ <b>Benvenuto nel Pantheon!</b> Registra i tuoi atleti e gestisci le biometrie facilmente." : "🏛️ <b>Bem-vindo ao Panteão!</b> Aqui você cadastra os perfis dos seus atletas e controla biometrias com facilidade.";
+            } else if(tutStep === 2) {
+                sub.innerText = activeL === 'en' ? "STEP 2 OF 3" : activeL === 'it' ? "PASSO 2 DI 3" : "PASSO 2 DE 3";
+                content.innerHTML = activeL === 'en' ? "💧 <b>Hydration Manager:</b> Track daily water intake with percent bars and customized goal options." : activeL === 'it' ? "💧 <b>Gestore Idratazione:</b> Monitora l'apporto giornaliero di acqua con barre percentuali." : "💧 <b>Gerenciador Hidratacional:</b> Acompanhe o consumo diário de água com barras percentuais e metas ajustáveis por objetivo.";
+            } else if(tutStep === 3) {
+                sub.innerText = activeL === 'en' ? "STEP 3 OF 3" : activeL === 'it' ? "PASSO 3 DI 3" : "PASSO 3 DE 3";
+                content.innerHTML = activeL === 'en' ? "⚡ <b>Glow Up & Functional:</b> Switch divine themes, configure functional, yoga, and zumba workouts with scientific backing." : activeL === 'it' ? "⚡ <b>Personalizzazione:</b> Cambia temi divini, configura allenamenti funzionali, yoga o zumba." : "⚡ <b>Personalização:</b> Alterne temas divinos, configure treinos funcionais, yoga ou zumba e desfrute de total controle.";
+                btn.innerText = activeL === 'en' ? "FINISH AND ENTER" : activeL === 'it' ? "TERMINA ED ENTRA" : "CONCLUIR E ENTRAR";
+            }
+        }
+
+        function nextTutorialStep() {
+            tutStep++;
+            if(tutStep > 3) showScreen('screen-lobby');
+            else updateTutorialContent();
+        }
+
+        function skipTutorial() { showScreen('screen-lobby'); }
+
         function checkAccess() {
-            if(localStorage.getItem('hercules_master')) showScreen('screen-login');
-            else alert("Crie uma conta primeiro!");
+            const activeL = tempLang || currentLang;
+            if(mastersList.length > 0 || currentMaster) showScreen('screen-login');
+            else alert(activeL === 'en' ? "Create a host account first." : activeL === 'it' ? "Crea prima un account ospite." : "Crie uma conta de anfitrião primeiro.");
         }
 
         function login() {
-            const m = JSON.parse(localStorage.getItem('hercules_master'));
-            if(document.getElementById('log-u').value === m.user && document.getElementById('log-p').value === m.pass) showScreen('screen-lobby');
-            else alert("Incorreto.");
+            const u = document.getElementById('log-u').value.trim();
+            const p = document.getElementById('log-p').value.trim();
+            const activeL = tempLang || currentLang;
+            const found = mastersList.find(m => m.user.toLowerCase() === u.toLowerCase() && m.pass === p);
+            if(found) {
+                currentMaster = found;
+                localStorage.setItem('hercules_v15_current_master', JSON.stringify(currentMaster));
+                document.getElementById('log-u').value = '';
+                document.getElementById('log-p').value = '';
+                showScreen('screen-lobby');
+            } else alert(activeL === 'en' ? "Incorrect credentials." : activeL === 'it' ? "Credenziali errate." : "Credenciais incorretas.");
         }
 
         function preparaEdicaoMestre() {
-            const m = JSON.parse(localStorage.getItem('hercules_master'));
-            document.getElementById('edit-m-u').value = m.user;
+            if(!currentMaster) return;
+            document.getElementById('edit-m-u').value = currentMaster.user;
             showScreen('screen-edit-master');
         }
 
         function updateMaster() {
-            const m = JSON.parse(localStorage.getItem('hercules_master'));
-            const nu = document.getElementById('edit-m-u').value;
-            const np = document.getElementById('edit-m-p').value;
-            if(nu) m.user = nu;
-            if(np) m.pass = np;
-            localStorage.setItem('hercules_master', JSON.stringify(m));
-            alert("Mestre Atualizado!");
-            showScreen('screen-lobby');
+            const nu = document.getElementById('edit-m-u').value.trim();
+            const np = document.getElementById('edit-m-p').value.trim();
+            if(!nu) return;
+            const idx = mastersList.findIndex(m => m.user.toLowerCase() === currentMaster.user.toLowerCase());
+            if(idx !== -1) {
+                mastersList[idx].user = nu;
+                if(np) mastersList[idx].pass = np;
+                currentMaster = mastersList[idx];
+                localStorage.setItem('hercules_v15_masters', JSON.stringify(mastersList));
+                localStorage.setItem('hercules_v15_current_master', JSON.stringify(currentMaster));
+                showScreen('screen-lobby');
+            }
         }
 
         function deleteMaster() {
-            if(confirm("⚠️ APAGAR TUDO?")) { localStorage.clear(); window.location.reload(); }
+            const activeL = tempLang || currentLang;
+            if(confirm(activeL === 'en' ? "Delete host account definitively? You will be logged out." : activeL === 'it' ? "Eliminare definitivamente l'account ospite? Verrai disconnesso." : "Apagar conta anfitriã definitivamente? Você será desconectado.")) { 
+                if (currentMaster) {
+                    mastersList = mastersList.filter(m => m.user.toLowerCase() !== currentMaster.user.toLowerCase());
+                    localStorage.setItem('hercules_v15_masters', JSON.stringify(mastersList));
+                }
+                currentMaster = null;
+                localStorage.removeItem('hercules_v15_current_master');
+                showScreen('screen-gate'); 
+            }
         }
 
         function renderLobby() {
-            const m = JSON.parse(localStorage.getItem('hercules_master'));
-            if(m) document.getElementById('mestre-atual').innerText = m.user.toUpperCase();
-            
+            if(currentMaster) {
+                document.getElementById('mestre-atual').innerText = currentMaster.user.toUpperCase();
+                document.getElementById('god-badge').innerText = `(${tempGodName || currentGodName})`;
+            }
             const container = document.getElementById('athletes-container');
             container.innerHTML = "";
+            const activeL = tempLang || currentLang;
             athletes.forEach(a => {
-                const age = calculateAge(a.nasc);
+                const age = calculateAgeFromParts(a.dia, a.mes, a.ano);
                 const div = document.createElement('div');
                 div.className = 'athlete-card';
                 div.onclick = () => openSheet(a.id);
-                div.innerHTML = `<span class="gender-badge" style="color:${a.sexo === 'M' ? 'var(--male)' : 'var(--female)'}; border-color:${a.sexo === 'M' ? 'var(--male)' : 'var(--female)'}">${a.sexo}</span>
-                <b style="color:var(--gold); font-size:18px;">${a.nome}</b><br>
-                <div style="font-size:11px; color:var(--text-dim); margin-top:5px;">
-                    ${age} ANOS | ${a.peso}KG | ${a.altura}CM<br>
-                    <span style="color:var(--gold); font-weight:700;">${a.meta}</span>
+                div.innerHTML = `<span class="gender-badge" style="color:${a.sexo === 'MASCULINO' ? 'var(--male)' : 'var(--female)'}; border-color:${a.sexo === 'MASCULINO' ? 'var(--male)' : 'var(--female)'}">${a.sexo}</span>
+                <b style="color:var(--primary); font-size:18px;">${a.nome}</b><br>
+                <div style="font-size:12px; color:var(--text-dim); margin-top:8px; font-weight:600;">
+                    ${activeL === 'en' ? 'AGE' : activeL === 'it' ? 'ETÀ' : 'IDADE'}: ${age} | ${activeL === 'en' ? 'WEIGHT' : activeL === 'it' ? 'PESO' : 'PESO'}: ${a.peso} KG | ${activeL === 'en' ? 'HEIGHT' : activeL === 'it' ? 'ALTEZZA' : 'ALTURA'}: ${a.altura} CM<br>
+                    ${activeL === 'en' ? 'GOAL' : activeL === 'it' ? 'OBIETTIVO' : 'META'}: <span style="color:var(--primary); font-weight:900;">${a.meta}</span>
                 </div>`;
                 container.appendChild(div);
             });
         }
 
-        function openAddAthlete() { currentAthleteId = null; showScreen('screen-athlete-form'); }
+        function openAddAthlete() { 
+            const activeL = tempLang || currentLang;
+            currentAthleteId = null; 
+            document.getElementById('form-title').innerText = activeL === 'en' ? "CREATE ATHLETE PROFILE" : activeL === 'it' ? "CREA PROFILO ATLETA" : "CRIAR PERFIL DE ATLETA";
+            document.getElementById('a-nome').value = '';
+            document.getElementById('a-dia').value = '';
+            document.getElementById('a-mes').value = '';
+            document.getElementById('a-ano').value = '';
+            document.getElementById('a-alt').value = '';
+            document.getElementById('a-peso').value = '';
+            document.getElementById('a-meta').value = 'FUNCIONAL';
+            checkMetaAguaCustom();
+            document.getElementById('delete-athlete-area').innerHTML = ''; 
+            showScreen('screen-athlete-form'); 
+        }
 
         function saveAthlete() {
-            const data = { id: currentAthleteId || Date.now(), nome: document.getElementById('a-nome').value, nasc: document.getElementById('a-nasc').value, sexo: document.getElementById('a-sexo').value, altura: document.getElementById('a-alt').value, peso: document.getElementById('a-peso').value, meta: document.getElementById('a-meta').value };
-            if(!data.nome || !data.nasc) return alert("Erro nos dados!");
-            if(currentAthleteId) { const idx = athletes.findIndex(x => x.id === currentAthleteId); athletes[idx] = data; }
-            else athletes.push(data);
-            localStorage.setItem('hercules_athletes', JSON.stringify(athletes));
+            const activeL = tempLang || currentLang;
+            const nomeInput = document.getElementById('a-nome').value.trim();
+            const dia = document.getElementById('a-dia').value;
+            const mes = document.getElementById('a-mes').value;
+            const ano = document.getElementById('a-ano').value;
+            const idAtleta = currentAthleteId || Date.now();
+            
+            if(!nomeInput || !dia || !mes || !ano) return alert(activeL === 'en' ? "Fill in all required fields." : activeL === 'it' ? "Compila tutti i campi obbligatori." : "Preencha todos os campos obrigatórios.");
+            if(athletes.some(a => a.nome.toLowerCase() === nomeInput.toLowerCase() && a.id !== idAtleta)) return alert(activeL === 'en' ? "Name already registered." : activeL === 'it' ? "Nome già registrato." : "Nome já cadastrado.");
+
+            let listaExerciciosSalvar = null;
+            let aguaAtualSalva = 0;
+
+            if(currentAthleteId) {
+                const antigo = athletes.find(x => x.id === currentAthleteId);
+                if(antigo) { listaExerciciosSalvar = antigo.exerciciosCustom; aguaAtualSalva = antigo.aguaIngerida || 0; }
+            }
+
+            const metaSel = document.getElementById('a-meta').value;
+            let metaAguaCalculada = metasAguaPadrao[metaSel] || 3000;
+            if(metaSel === "TREINO LIVRE") {
+                const valAgua = parseInt(document.getElementById('a-agua-custom').value);
+                if(valAgua && valAgua >= 500) metaAguaCalculada = valAgua;
+            }
+
+            const data = { 
+                id: idAtleta, nome: nomeInput, dia, mes, ano, 
+                sexo: document.getElementById('a-sexo').value, altura: document.getElementById('a-alt').value, 
+                peso: document.getElementById('a-peso').value, meta: metaSel, metaAguaPersonalizada: metaAguaCalculada,
+                exerciciosCustom: listaExerciciosSalvar, aguaIngerida: aguaAtualSalva
+            };
+            
+            if(currentAthleteId) { athletes[athletes.findIndex(x => x.id === currentAthleteId)] = data; } 
+            else { athletes.push(data); }
+            
+            localStorage.setItem('hercules_v15_athletes', JSON.stringify(athletes));
             showScreen('screen-lobby');
         }
 
         function editCurrentAthlete() {
+            const activeL = tempLang || currentLang;
             const a = athletes.find(x => x.id === currentAthleteId);
+            document.getElementById('form-title').innerText = activeL === 'en' ? "EDIT PROFILE" : activeL === 'it' ? "MODIFICA PROFILO" : "EDITAR PERFIL";
             document.getElementById('a-nome').value = a.nome;
-            document.getElementById('a-nasc').value = a.nasc;
+            document.getElementById('a-dia').value = a.dia || '';
+            document.getElementById('a-mes').value = a.mes || '';
+            document.getElementById('a-ano').value = a.ano || '';
+            document.getElementById('a-sexo').value = a.sexo;
             document.getElementById('a-alt').value = a.altura;
             document.getElementById('a-peso').value = a.peso;
             document.getElementById('a-meta').value = a.meta;
+            document.getElementById('a-agua-custom').value = a.metaAguaPersonalizada || 3000;
+            checkMetaAguaCustom();
+
+            document.getElementById('delete-athlete-area').innerHTML = `
+                <button class="btn-outline" style="color:var(--danger); border-color:var(--danger); margin-top:5px;" onclick="deleteAthlete(${a.id})">
+                    ❌ ${activeL === 'en' ? 'DELETE PROFILE PERMANENTLY' : activeL === 'it' ? 'ELIMINA PROFILO DEFINITIVAMENTE' : 'APAGAR PERFIL E PLANILHA DEFINITIVAMENTE'}
+                </button>
+            `;
             showScreen('screen-athlete-form');
+        }
+
+        function deleteAthlete(id) {
+            const activeL = tempLang || currentLang;
+            if(confirm(activeL === 'en' ? "Delete this athlete?" : activeL === 'it' ? "Eliminare questo atleta?" : "Excluir este atleta?")) {
+                athletes = athletes.filter(x => x.id !== id);
+                localStorage.setItem('hercules_v15_athletes', JSON.stringify(athletes));
+                showScreen('screen-lobby');
+            }
         }
 
         function openSheet(id) {
             currentAthleteId = id;
             const a = athletes.find(x => x.id === id);
-            document.getElementById('sh-name').innerText = a.nome.toUpperCase();
-            document.getElementById('sh-bio').innerText = `${calculateAge(a.nasc)} ANOS | ${a.peso}KG | ${a.altura}CM | ${a.meta}`;
+            const idade = calculateAgeFromParts(a.dia, a.mes, a.ano);
+            const activeL = tempLang || currentLang;
             
+            document.getElementById('sh-name').innerText = a.nome.toUpperCase();
+            document.getElementById('sh-bio').innerText = `${activeL === 'en' ? 'GENDER' : activeL === 'it' ? 'SESSO' : 'SEXO'}: ${a.sexo} | ${activeL === 'en' ? 'AGE' : activeL === 'it' ? 'ETÀ' : 'IDADE'}: ${idade} | ${activeL === 'en' ? 'WEIGHT' : activeL === 'it' ? 'PESO' : 'PESO'}: ${a.peso}KG | ${activeL === 'en' ? 'HEIGHT' : activeL === 'it' ? 'ALTEZZA' : 'ALTURA'}: ${a.altura}CM | ${activeL === 'en' ? 'GOAL' : activeL === 'it' ? 'OBIETTIVO' : 'META'}: ${a.meta}`;
+            
+            updateWaterDisplay();
             const content = document.getElementById('workout-content');
             content.innerHTML = "";
 
-            const agenda = [
-                { dia: "SEGUNDA - FORÇA SUPERIOR", exs: [{n: "Supino Reto", v: 40}, {n: "Puxada Alta", v: 35}] },
-                { dia: "TERÇA - INFERIORES BASE", exs: [{n: "Agachamento", v: 50}, {n: "Levantamento Terra", v: 60}] },
-                { dia: "QUARTA - DESCANSO ATIVO", exs: [{n: "Caminhada", v: 30, u: "MIN"}] },
-                { dia: "QUINTA - METABÓLICO", exs: [{n: "Burpees", v: 20, u: "REPS"}, {n: "Supino Reto", v: 35}] },
-                { dia: "SEXTA - TÉCNICA", exs: [{n: "Puxada Alta", v: 40}, {n: "Agachamento", v: 45}] }
-            ];
+            if(!a.exerciciosCustom) {
+                a.exerciciosCustom = [
+                    { diaIdx: 0, ex1: "Supino Reto", v1: 40, ex2: "Puxada Alta", v2: 35 },
+                    { diaIdx: 1, ex1: "Agachamento", v1: 50, ex2: "Levantamento Terra", v2: 60 },
+                    { diaIdx: 2, ex1: "Caminhada", v1: 30, ex2: "Burpees", v2: 10 },
+                    { diaIdx: 3, ex1: "Burpees", v1: 15, ex2: "Supino Reto", v2: 35 },
+                    { diaIdx: 4, ex1: "Puxada Alta", v1: 40, ex2: "Agachamento", v2: 45 }
+                ];
+            }
 
-            agenda.forEach(item => {
-                content.innerHTML += `<div class="day-tab">${item.dia}</div>`;
-                item.exs.forEach(e => {
-                    content.innerHTML += `<div class="ex-row">
-                        <div class="ex-info"><b>${e.n}</b><span>Foco em progressão</span></div>
-                        <div><input type="number" class="val-input" value="${e.v}" min="0"> <span class="label" style="display:inline">${e.u || 'KG'}</span></div>
-                        <button class="btn-outline" style="padding:5px; font-size:9px" onclick="showExerciseDetail('${e.n}')">TÉCNICA</button>
-                    </div>`;
-                });
+            const daysList = translations[activeL].days;
+            a.exerciciosCustom.forEach((item, index) => {
+                const dayLabel = daysList[index] || item.dia || `DAY ${index+1}`;
+                content.innerHTML += `<div class="day-tab">${dayLabel}</div>`;
+                content.innerHTML += generateExerciseRow(item.ex1, item.v1, index, 1, a.meta);
+                content.innerHTML += generateExerciseRow(item.ex2, item.v2, index, 2, a.meta);
             });
             showScreen('screen-sheet');
         }
 
+        function updateWaterDisplay() {
+            const a = athletes.find(x => x.id === currentAthleteId);
+            if(!a) return;
+            if(a.aguaIngerida === undefined) a.aguaIngerida = 0;
+            const metaTotal = a.metaAguaPersonalizada || metasAguaPadrao[a.meta] || 3000;
+            const pct = Math.min(Math.round((a.aguaIngerida / metaTotal) * 100), 100);
+
+            document.getElementById('water-bar-fill').style.width = pct + '%';
+            document.getElementById('water-pct-text').innerText = pct + '%';
+            document.getElementById('water-num-display').innerText = `${a.aguaIngerida} / ${metaTotal} ml`;
+        }
+
+        function addWater(amount) {
+            const a = athletes.find(x => x.id === currentAthleteId);
+            if(!a) return;
+            a.aguaIngerida = (a.aguaIngerida || 0) + amount;
+            localStorage.setItem('hercules_v15_athletes', JSON.stringify(athletes));
+            updateWaterDisplay();
+        }
+
+        function resetWater() {
+            const activeL = tempLang || currentLang;
+            const a = athletes.find(x => x.id === currentAthleteId);
+            if(!a) return;
+            if(confirm(activeL === 'en' ? "Reset water?" : activeL === 'it' ? "Ripristina acqua?" : "Reiniciar água?")) {
+                a.aguaIngerida = 0;
+                localStorage.setItem('hercules_v15_athletes', JSON.stringify(athletes));
+                updateWaterDisplay();
+            }
+        }
+
+        function generateExerciseRow(exName, value, dayIdx, exNum, meta) {
+            const activeL = tempLang || currentLang;
+            const exTranslated = translations[activeL].exercises[exName] || exName;
+            let nameField = `<b onclick="showExerciseDetail('${exName}')">${exTranslated}</b>`;
+            
+            if(meta === "TREINO LIVRE") {
+                nameField = `
+                    <select class="input-box" style="padding:5px; font-weight:700; width:160px; display:inline-block; color:var(--primary);" onchange="updateLiveExercise(${dayIdx}, ${exNum}, this.value)">
+                        <option value="${exName}" selected>${exTranslated}</option>
+                        <option value="Supino Reto">${translations[activeL].exercises["Supino Reto"]}</option>
+                        <option value="Agachamento">${translations[activeL].exercises["Agachamento"]}</option>
+                        <option value="Levantamento Terra">${translations[activeL].exercises["Levantamento Terra"]}</option>
+                        <option value="Puxada Alta">${translations[activeL].exercises["Puxada Alta"]}</option>
+                        <option value="Burpees">${translations[activeL].exercises["Burpees"]}</option>
+                        <option value="Caminhada">${translations[activeL].exercises["Caminhada"]}</option>
+                    </select>
+                `;
+            }
+            return `
+                <div class="ex-row">
+                    <div class="ex-info">${nameField}<span>${activeL === 'en' ? 'Technical Guide' : activeL === 'it' ? 'Guida tecnica' : 'Guia técnico'}</span></div>
+                    <div><input type="number" class="val-input" value="${value}" onchange="updateCargaValue(${dayIdx}, ${exNum}, this.value)"> <span class="label" style="display:inline">KG</span></div>
+                    <button class="btn-outline" style="padding:8px; font-size:10px; margin:0;" onclick="showExerciseDetail('${exName}')">${activeL === 'en' ? 'DETAILS' : activeL === 'it' ? 'DETTAGLI' : 'DETALHES'}</button>
+                </div>
+            `;
+        }
+
+        function updateLiveExercise(dayIdx, exNum, newVal) {
+            const a = athletes.find(x => x.id === currentAthleteId);
+            if(exNum === 1) a.exerciciosCustom[dayIdx].ex1 = newVal;
+            if(exNum === 2) a.exerciciosCustom[dayIdx].ex2 = newVal;
+            localStorage.setItem('hercules_v15_athletes', JSON.stringify(athletes));
+        }
+
+        function updateCargaValue(dayIdx, exNum, newVal) {
+            const a = athletes.find(x => x.id === currentAthleteId);
+            if(exNum === 1) a.exerciciosCustom[dayIdx].v1 = parseInt(newVal) || 0;
+            if(exNum === 2) a.exerciciosCustom[dayIdx].v2 = parseInt(newVal) || 0;
+            localStorage.setItem('hercules_v15_athletes', JSON.stringify(athletes));
+        }
+
         function showExerciseDetail(name) {
-            const d = dbTreinos[name];
-            document.getElementById('det-name').innerText = name.toUpperCase();
-            document.getElementById('det-content').innerHTML = `<h3>Foco</h3><p>${d.foco}</p><h3>Execução</h3><p>${d.exec}</p><h3>Segurança</h3><p>${d.seg}</p>`;
+            const activeL = tempLang || currentLang;
+            const exObj = dbTreinos[name] || dbTreinos["Supino Reto"];
+            const dataLang = exObj[activeL] || exObj["pt"];
+            const exTranslated = translations[activeL].exercises[name] || name;
+            
+            document.getElementById('det-name').innerText = exTranslated.toUpperCase();
+            document.getElementById('det-content').innerHTML = `
+                <h3>${activeL === 'en' ? 'Focus' : activeL === 'it' ? 'Focus' : 'Foco'}</h3><p>${dataLang.foco}</p>
+                <h3>${activeL === 'en' ? 'Execution' : activeL === 'it' ? 'Esecuzione' : 'Execução'}</h3><p>${dataLang.exec}</p>
+                <h3>${activeL === 'en' ? 'Safety' : activeL === 'it' ? 'Sicurezza' : 'Segurança'}</h3><p>${dataLang.seg}</p>
+            `;
+            
+            document.getElementById('custom-rest-min').value = 1;
+            document.getElementById('custom-rest-sec').value = 0;
+            validateRestInput();
+            
+            clearInterval(timerInterval);
+            document.getElementById('timer-btn').disabled = false;
+            document.getElementById('timer-btn').innerText = translations[activeL].btnTimer;
             showScreen('screen-ex-detail');
         }
 
-        function logout() { if(confirm("Sair?")) showScreen('screen-gate'); }
+        function validateRestInput() {
+            let mInput = document.getElementById('custom-rest-min');
+            let sInput = document.getElementById('custom-rest-sec');
 
-        window.onload = () => { if(localStorage.getItem('hercules_master')) renderLobby(); };
+            let min = parseInt(mInput.value);
+            if (isNaN(min) || min < 0) min = 0;
+            if (min > 60) min = 60;
+            mInput.value = min;
+
+            let sec = parseInt(sInput.value);
+            if (isNaN(sec) || sec < 0) sec = 0;
+            if (sec > 59) sec = 59; // TRAVA RIGOROSA: MÁXIMO 59 SEGUNDOS
+            sInput.value = sec;
+
+            restTimeSeconds = (min * 60) + sec;
+            clearInterval(timerInterval);
+            updateTimerDisplay(restTimeSeconds);
+            
+            const activeL = tempLang || currentLang;
+            const btn = document.getElementById('timer-btn');
+            btn.disabled = false;
+            btn.innerText = translations[activeL].btnTimer;
+        }
+
+        function updateTimerDisplay(totalSec) {
+            let min = Math.floor(totalSec / 60), sec = totalSec % 60;
+            document.getElementById('timer-display').innerText = `${min < 10 ? '0'+min : min}:${sec < 10 ? '0'+sec : sec}`;
+        }
+
+        function startRestTimer() {
+            let timeLeft = restTimeSeconds;
+            const btn = document.getElementById('timer-btn');
+            const activeL = tempLang || currentLang;
+            btn.disabled = true;
+            clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay(timeLeft);
+                if(timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer-display').innerText = activeL === 'en' ? "READY!" : activeL === 'it' ? "PRONTO!" : "PRONTO!";
+                    btn.disabled = false;
+                    alert(activeL === 'en' ? "Rest time completed!" : activeL === 'it' ? "Tempo di riposo completato!" : "Tempo de descanso concluído!");
+                }
+            }, 1000);
+        }
+
+        function stopTimerAndGoBack() { clearInterval(timerInterval); showScreen('screen-sheet'); }
+        
+        function logout() { 
+            if(confirm("Até logo! / A presto!")) { 
+                currentMaster = null; 
+                localStorage.removeItem('hercules_v15_current_master');
+                showScreen('screen-gate'); 
+            } 
+        }
+
+        window.onload = () => { 
+            applyThemeState();
+            applyLanguage();
+            if(currentMaster) renderLobby(); 
+        };
     </script>
 </body>
 </html>
